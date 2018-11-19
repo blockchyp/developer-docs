@@ -3,10 +3,39 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-BlockChyp Developer Documentation
+BlockChyp Developer Center
 =============================================================
 
-Release 0.1.0
+Welcome to BlockChyp's developer documentation center.
+
+SDK's and Clients
+-----------------
+
+- `Javascript SDK <https://github.com/blockchyp/blockchyp-js>`_
+- `Java SDK <https://github.com/blockchyp/blockchyp-java>`_
+
+Terminal Integration
+--------------------
+
+Most developers are interested in integrating with BlockChyp terminals to run card present transactions.
+
+E-Commerce Integration
+----------------------
+
+BlockChyp also does that fancy in browser tokenization you've heard so much about.
+
+Roll Your Own SDK
+--------------------
+
+If there's not SDK for your favorite language or platform, checkout out our SDK developers guide for our advice
+about how to make your own.
+
+.. toctree::
+   :maxdepth: 2
+
+   sdk-guide/index
+
+
 
 
 
@@ -16,7 +45,7 @@ Release 0.1.0
 
 
 
-Indices and tables
+Indices and Tables
 ==================
 
 * :ref:`genindex`
