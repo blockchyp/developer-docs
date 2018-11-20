@@ -11,6 +11,8 @@ Welcome to BlockChyp's developer documentation center.
 SDKs and Clients
 -----------------
 
+- `Go SDK <https://github.com/blockchyp/blockchyp-go>`_
+- `Python SDK <https://github.com/blockchyp/blockchyp-python>`_
 - `Javascript SDK <https://github.com/blockchyp/blockchyp-js>`_
 - `Java SDK <https://github.com/blockchyp/blockchyp-java>`_
 
@@ -31,7 +33,7 @@ If there's not SDK for your favorite language or platform, checkout out our SDK 
 about how to make your own.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    sdk-guide/index
 
