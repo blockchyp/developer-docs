@@ -29,8 +29,8 @@ BlockChyp also does that fancy in browser tokenization you've heard so much abou
 Roll Your Own SDK
 --------------------
 
-If there's not SDK for your favorite language or platform, checkout out our SDK developers guide for our advice
-about how to make your own.
+If there's not an SDK for your favorite language or platform, checkout out our
+SDK developers guide for our advice about how to make your own.
 
 .. toctree::
    :maxdepth: 1
