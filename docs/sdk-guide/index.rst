@@ -15,6 +15,26 @@ Simplicity First
 ----------------
 
 BlockChyp's mission is simplicity.  If you've ever done an integration with a
-card present EMV payment system, you've been through hell.  These systems are,
-more often than not, overly complex, poorly documented and when you run into
+card present EMV payment system, you've been through hell.  These systems are -
+more often than not - overly complex, poorly documented, and when you run into
 trouble, straight answers from the payment companies are rare.
+
+Our goal is the make sure the developer using an SDK has to do as little as
+possible.  Business logic and all the logic about how transactions are routed
+should be totally encapsulated by the SDK.
+
+A developer should be able to pass a simple payment request into your SDK, and
+your SDK should automatically figure out whether or not the route the transaction
+to the BlockChyp gateway or to a terminal.  When a terminal is referenced by name,
+you SDK should make use of the Gateway's Route API to locate the terminal on the
+local network or relay the transaction to the terminal through the cloud. (Also
+known as the freaking Internet.)
+
+The Transactions
+----------------
+
+BlockChyp SDKs should support the following basic transactions:
+
+- Charge: This is a direct capture transaction where a transaction is authorized and captured in a single step.
+- Preauth: This transactions authorizes a card and delays capture.  Used a lot in hospitality transactions.
+- Void: 

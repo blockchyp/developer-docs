@@ -8,7 +8,7 @@ BlockChyp Developer Center
 
 Welcome to BlockChyp's developer documentation center.
 
-SDK's and Clients
+SDKs and Clients
 -----------------
 
 - `Javascript SDK <https://github.com/blockchyp/blockchyp-js>`_
