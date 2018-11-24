@@ -256,7 +256,7 @@ For example, gift card transactions must always be sent to a terminal.  Charge t
 could be sent to the terminal or the gateway, depending on context.  If the charge
 transaction includes a token, mag stripe, or primary account number; the transaction
 can (and must) be routed directly to the gateway.  But in most cases, the transaction only
-has a terminal name or IP address, the transaction will need to be sent to a terminal.
+has a terminal name or IP address, and the transaction will need to be sent to a terminal.
 
 [Terminal Route Diagram]
 
@@ -353,7 +353,572 @@ the following root certificate:
 
 .. warning::  Don't globally trust the certificate above.  It should be trusted only by the HTTP client instances that communicate with payment terminals.  Use your platform default certificate bundles for all other HTTP communication, including with the BlockChyp gateway.
 
-SDK Configuration
+Transaction Types
 -----------------
 
-TBD
+The core BlockChyp transactions fall into a few different categories with similar data structures.
+
+**Authorization Transactions** are used to capture a payment method through the
+gateway or via a payment terminal.  These are the only transactions types that
+deal directly with payment methods.
+
+**Authorization Transactions**
+******************************
+
+- Charge
+- Preauth
+- Refund
+- Reverse
+
+**Authorization Request**::
+
+  {
+    // primary currency for the transaction
+    "currencyCode": "USD",
+
+    // string encoded amount in the primary currency
+    "amount": "20.55",
+
+    // name assigned to the terminal at activation
+    "terminalName": "Cashier #1",
+
+    // reusable payment token obtained from a previous enroll transaction
+    "token": "XXXXXXXX", // reusable token
+
+    // magnetic stripe tracks for conventional transactions
+    "track1": "",  // MSR track 1
+    "track2": "",  // MSR track 2
+
+    // primary account number for keyed or e-commerce transactions
+    "pan": "4111111111111111",
+
+    // verification fields for keyed or e-commerce transactions
+    "cardholderName": "John Doe",
+    "expMonth": "12", // expiration month (MM)
+    "expYear": "2020", // expiration year (YYYY)
+    "cvv": "000", // CVV code
+    "address": "5453 Ridgeline, Suite 160, Kennewick, WA  00000",
+    "postalCode": "00000",
+
+    // if true, the payment method will also be saved and tokenized after
+    // authorization
+    "enroll": false,
+
+    // passthrough transaction identifier defined by the application.
+    "transactionRef": "0000000012",
+
+    // for terminal transactions, the consumer will be prompted to add a tip
+    "promptForTip": false,
+
+    // optional tax amount
+    "taxAmount": "0.00",
+
+    // tip amount, if known at authorization time
+    "tipAmount": "0.00",
+
+    // optional description for the consumer's credit card statement
+    "description": "Adventures Underground Richland"
+
+    // flags the transaction as a test transaction
+    // only valid with test api credentials
+    "test": false,
+
+    // If the merchant has set foreign exchange or cryptocurrency
+    // prices, they can be passed in here.  Otherwise cryptocurrency
+    // and foreign exchange spot prices are used.
+    // Only valid for terminal transactions.
+    "altPrices": {
+      "BTC": "23098",  //optional Bitcoin price (in Satoshis)
+      "ETH": "234"     //optional Ethereum price
+    }
+  }
+
+Note that some fields in the authorization request are mutually exclusive. An
+authorization request can have either a **terminal name**, **token**, **track data**, or
+**primary account number**.
+
+Request with terminal names are routed to terminals.  All other transactions are
+routed directly to the BlockChyp gateway.  The CVV, expiration data, address, postal
+code and cardholder name are relevant only for transactions using the primary
+account number.
+
+**Note that we strongly recommend that developers avoid sending track data or
+primary account numbers.  Doing so will trigger the BlockChyp Scope Alert feature
+and flag the merchant account as being in scope for PCI.**
+
+All authorization request have the same response format as shown below:
+
+**Authorization Response**::
+
+  {
+    // Indicates whether or not the transaction was approved.
+    "approved": true,
+
+    // Flag indicating that the approval was a partial authorization.
+    "partialAuth": false,
+
+    // Narrative description of the response.
+    "responseDescription": "Approved",
+
+    // Transaction ID assigned by BlockChyp.  Needed for voids and preauth
+    // capture transactions.
+    "transactionId": "ASDASERERE", // BlockChyp assigned transaction ID.
+
+    // Payment token returned for transactions that request vault enrollment
+    "token": "..."
+
+    // The application assigned transaction reference returned in the response
+    "transactionRef": "0000000012",
+
+    // Amount authorized.  Would be less than the requested amount for
+    // partial authorizations.
+    "authorizedAmount": "20.55",
+
+    // Echos back the original requested amount or
+    "requestedAmount": "20.55",
+
+    // Returns the original tip amount in the request or the tip amount
+    // entered by the consumer if promptForTip was set to true
+    "tipAmount": "0.00",
+
+    // The original tax amount for the transaction.
+    "taxAmount": "0.00",
+
+    // The currency code echoed back.  Could be different if the consumer
+    // paid in cryptocurrency.
+    "currencyCode": "USD",
+
+    //The card entry method.  e.g. CHIP, SWIPE, KEYED, APPLEPAY, TOKEN, NFC.
+    "entryMethod": "CHIP",
+
+    //The payment method type. e.g. VISA, MC, AMEX, DISC, GIFT, GRAFT.
+    "paymentType": "VISA",
+
+    //Masked account number
+    "maskedPan": "************0119,"
+
+    //Transaction Type
+    "transactionType": "charge",
+
+    // Authorization Code from the card issuer.
+    "authCode": "010119",
+
+    // Indicates whether the transactions triggers the BlockChyp scope alert
+    // feature for the merchant.
+    "scopeAlert": false,
+
+    // For BlockChyp cards (usually gift cards), the card's compressed
+    // public key.
+    "publicKey": "...",
+
+    // ECDSA signature for terminal transactions, signed by the terminal.
+    "sig": "c7722b911f9821e742f248af8449f12f06304c18b48b902f7cdef3d9dea7ed34",
+
+    // A list of EMV tags we recommend developers put on their receipts.
+    "receiptSuggestions:" {
+      // Application ID.  Required on all receipts per EMV.
+      "AID": "A0000000031010",
+
+      // Application Request Cryptogram
+      "ARQC": "649A5C5FCA0CFD24",
+
+      // Issuer Application Data
+      "IAD": "B17C939DEA2B3A5D3030",
+
+      // Authorization Response Code
+      "ARC": "3030",
+
+      // Transaction Certificate
+      "TC": "B17C939DEA2B3A5D3030"
+    }
+  }
+
+**Vault Enrollment**
+********************
+
+The **Enroll Transaction** is similar to authorization transactions, except that
+amounts are not relevant since this transaction type is just used to turn a payment
+method into a reusable token.
+
+**Enrollment Request**::
+
+  {
+
+    // name assigned to the terminal at activation
+    "terminalName": "Cashier #1",
+
+    // magnetic stripe tracks for conventional transactions
+    "track1": "",  // MSR track 1
+    "track2": "",  // MSR track 2
+
+    // primary account number for keyed or e-commerce transactions
+    "pan": "4111111111111111",
+
+    // verification fields for keyed or e-commerce transactions
+    "cardholderName": "John Doe",
+    "expMonth": "12", // expiration month (MM)
+    "expYear": "2020", // expiration year (YYYY)
+    "cvv": "000", // CVV code
+    "address": "5453 Ridgeline, Suite 160, Kennewick, WA  00000",
+    "postalCode": "00000",
+
+    // passthrough transaction identifier defined by the application.
+    "transactionRef": "0000000012",
+
+    // flags the transaction as a test transaction
+    // only valid with test api credentials
+    "test": false
+
+  }
+
+The response to an enroll transaction is shown below:
+
+**Enrollment Response**::
+
+  {
+    // Indicates whether or not the transaction was approved.
+    "approved": true,
+
+    // Narrative description of the response.
+    "responseDescription": "Approved",
+
+    // Transaction ID assigned by BlockChyp.  Needed for voids and preauth
+    // capture transactions.
+    "transactionId": "ASDASERERE", // BlockChyp assigned transaction ID.
+
+    // Payment token returned for transactions that request vault enrollment
+    "token": "..."
+
+    // The application assigned transaction reference returned in the response
+    "transactionRef": "0000000012",
+
+    //The card entry method.  e.g. CHIP, SWIPE, KEYED, APPLEPAY, TOKEN, NFC.
+    "entryMethod": "CHIP",
+
+    //The payment method type. e.g. VISA, MC, AMEX, DISC, GIFT, GRAFT.
+    "paymentType": "VISA",
+
+    //Masked account number
+    "maskedPan": "************0119,"
+
+    //Transaction Type
+    "transactionType": "enroll",
+
+    // Indicates whether the transactions triggers the BlockChyp scope alert
+    // feature for the merchant.
+    "scopeAlert": false,
+
+    // For BlockChyp cards (usually gift cards), the card's compressed
+    // public key.
+    "publicKey": "...",
+
+    // ECDSA signature for terminal transactions, signed by the terminal.
+    "sig": "c7722b911f9821e742f248af8449f12f06304c18b48b902f7cdef3d9dea7ed34",
+
+    // A list of EMV tags we recommend developers put on their receipts.
+    "receiptSuggestions:" {
+      // Application ID.
+      "AID": "A0000000031010",
+    }
+  }
+
+
+**Preauth Capture**
+*******************
+
+Capture is used to capture a pre-auth.  Must refer to the transaction ID returned
+in the original preauth.
+
+**Capture Request**::
+
+  {
+
+    // primary currency for the transaction
+    "currencyCode": "USD",
+
+    // transaction id
+    "transactionId": "....",
+
+    // string encoded amount in the primary currency
+    "amount": "20.55",
+
+    // passthrough transaction identifier defined by the application.
+    "transactionRef": "0000000012",
+
+    // optional tax amount
+    "taxAmount": "0.00",
+
+    // tip amount, if known at authorization time
+    "tipAmount": "0.00",
+
+    // flags the transaction as a test transaction
+    // only valid with test api credentials
+    "test": false,
+
+  }
+
+**Capture Response**::
+
+  {
+    // Indicates whether or not the transaction was approved.
+    "approved": true,
+
+    // Narrative description of the response.
+    "responseDescription": "Approved",
+
+    // Transaction ID assigned by BlockChyp.  Needed for voids and preauth
+    // capture transactions.
+    "transactionId": "ASDASERERE", // BlockChyp assigned transaction ID.
+
+    // The application assigned transaction reference returned in the response
+    "transactionRef": "0000000012",
+
+    //The card entry method.  e.g. CHIP, SWIPE, KEYED, APPLEPAY, TOKEN, NFC.
+    "entryMethod": "CHIP",
+
+    //The payment method type. e.g. VISA, MC, AMEX, DISC, GIFT, GRAFT.
+    "paymentType": "VISA",
+
+    //Masked account number
+    "maskedPan": "************0119,"
+
+    //Transaction Type
+    "transactionType": "capture",
+
+    // For BlockChyp cards (usually gift cards), the card's compressed
+    // public key.
+    "publicKey": "...",
+
+  }
+
+
+**Void Preauth**
+****************
+
+Voids are used to discard a previous preauth.  They're like captures in reverse.
+
+**Void Request**::
+
+  {
+
+    // primary currency for the transaction
+    "currencyCode": "USD",
+
+    // transaction id
+    "transactionId": "....",
+
+    // passthrough transaction identifier defined by the application.
+    "transactionRef": "0000000012",
+
+    // flags the transaction as a test transaction
+    // only valid with test api credentials
+    "test": false,
+
+  }
+
+**Void Response**::
+
+  {
+    // Indicates whether or not the transaction was approved.
+    "approved": true,
+
+    // Narrative description of the response.
+    "responseDescription": "Approved",
+
+    // Transaction ID assigned by BlockChyp.  Needed for voids and preauth
+    // capture transactions.
+    "transactionId": "ASDASERERE", // BlockChyp assigned transaction ID.
+
+    // The application assigned transaction reference returned in the response
+    "transactionRef": "0000000012",
+
+    //The card entry method.  e.g. CHIP, SWIPE, KEYED, APPLEPAY, TOKEN, NFC.
+    "entryMethod": "CHIP",
+
+    //The payment method type. e.g. VISA, MC, AMEX, DISC, GIFT, GRAFT.
+    "paymentType": "VISA",
+
+    //Masked account number
+    "maskedPan": "************0119,"
+
+    //Transaction Type
+    "transactionType": "void",
+
+    // For BlockChyp cards (usually gift cards), the card's compressed
+    // public key.
+    "publicKey": "...",
+
+  }
+
+**Terminal Ping**
+*****************
+
+Simple test transaction that allows connectivity with a terminal to be tested.
+
+**Ping Request**::
+
+  {
+
+    // primary currency for the transaction
+    "terminalName": "Cashier #1",
+
+    // passthrough transaction identifier defined by the application.
+    "transactionRef": "0000000012",
+
+    // flags the transaction as a test transaction
+    // only valid with test api credentials
+    "test": false,
+
+  }
+
+**Ping Response**::
+
+  {
+    // Indicates whether or not the ping worked.
+    "success": true,
+
+    // ISO 8601 formatted timestamp
+    "timestamp": "2008-09-15T15:53:00Z",
+
+    // returns the name of the merchant paired with the terminal
+    "merchantName": "Adventures Underground",
+
+    // returns the name assigned to the terminal
+    "terminalName": "Cashier #1",
+
+    // Indicates whether or not the terminal request was routed through
+    // the cloud or not.
+    "cloudRelayed": false
+
+  }
+
+
+**Gift Activate**
+*****************
+
+This transaction is used to activate or add value to a BlockChyp gift card.
+Valid with terminals only.
+
+**Gift Activate Request**::
+
+  {
+
+    // primary currency for the transaction
+    "currencyCode": "USD",
+
+    // amount to add to the gift card
+    "amount": "50.00",
+
+    // name assigned to the terminal at activation
+    "terminalName": "Cashier #1",
+
+    // passthrough transaction identifier defined by the application.
+    "transactionRef": "0000000012",
+
+    // flags the transaction as a test transaction
+    // only valid with test api credentials
+    "test": false,
+
+  }
+
+Gift card activation transactions return the following response:
+
+**Gift Activation Response**::
+
+  {
+    // Indicates whether or not the transaction was approved.
+    "approved": true,
+
+    // Narrative description of the response.
+    "responseDescription": "Approved",
+
+    // Transaction ID assigned by BlockChyp.  Needed for voids and preauth
+    // capture transactions.
+    "transactionId": "ASDASERERE", // BlockChyp assigned transaction ID.
+
+    // The application assigned transaction reference returned in the response
+    "transactionRef": "0000000012",
+
+    // Amount added to the gift card balance
+    "amount": "50.00",
+
+    // Total balance on the gift card after the transaction.
+    "currentBalance": "50.00",
+
+    // The currency code echoed back.
+    "currencyCode": "USD",
+
+    //Transaction Type
+    "transactionType": "gift_activate",
+
+    // The card's compressed public key.
+    "publicKey": "...",
+
+    // ECDSA signature for the transaction.
+    "sig": "c7722b911f9821e742f248af8449f12f06304c18b48b902f7cdef3d9dea7ed34",
+
+  }
+
+**Close Batch**
+***************
+
+This transaction forces closure of the current credit card batch if there is one.
+BlockChyp cards and cryptocurrency work differently and aren't part batch based.
+
+This is an optional transaction since batches will close automatically.  This
+transaction should only be used for merchants with unusual hours or for those
+open 24 hours a day.
+
+**Close Batch Request**::
+
+  {
+
+    // passthrough transaction identifier defined by the application.
+    "transactionRef": "0000000012",
+
+    // flags the transaction as a test transaction
+    // only valid with test api credentials
+    "test": false,
+
+  }
+
+The close batch response includes simple approval data and a summary of
+transaction volume by card brand.
+
+**Close Batch Response**::
+
+  {
+
+    // Transaction ID assigned by BlockChyp.  Needed for voids and preauth
+    // capture transactions.
+    "transactionId": "ASDASERERE", // BlockChyp assigned transaction ID.
+
+    // batch identifier
+    "batchId": "12321321321",
+
+    // passthrough transaction identifier defined by the application.
+    "transactionRef": "0000000012",
+
+    // flags the transaction as a test transaction
+    // only valid with test api credentials
+    "test": false,
+
+    // currency code for the batch
+    "currencyCode": "USD",
+
+    // captured total
+    "capturedTotal": "1234.45"
+
+    // open preauthorization
+    "openPreauths": "345.34",
+
+    //captured total breakdown by card brand
+    "cardBrands": {
+      "VISA": "234.45",
+      "MC": "400.00",
+      "AMEX": "300.00",
+      "DISC": "300.00"
+    }
+
+
+  }
