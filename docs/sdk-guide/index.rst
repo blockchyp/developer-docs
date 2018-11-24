@@ -907,7 +907,7 @@ transaction volume by card brand.
     "currencyCode": "USD",
 
     // captured total
-    "capturedTotal": "1234.45"
+    "capturedTotal": "1234.45",
 
     // open preauthorization
     "openPreauths": "345.34",
@@ -919,6 +919,5 @@ transaction volume by card brand.
       "AMEX": "300.00",
       "DISC": "300.00"
     }
-
 
   }
