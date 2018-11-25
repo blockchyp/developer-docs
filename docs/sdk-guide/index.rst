@@ -81,16 +81,7 @@ Your client application calls your SDK's "charge" function and passes in the fol
   {
     "amount": "20.55",
     "terminalName": "Cashier #1",
-    "currencyCode": "USD",  // optional
-    "transactionRef": "0000000012",  // optional - application assigned
-    "promptForTip": false,  // optional
-    "description": "Adventures Underground Richland"  //optional
-    "test": false,  //optional
-    "altPrices": {  //optional prices in other currencies
-      "BTC": "23098",  //optional Bitcoin price (in Satoshis)
-      "ETH": "234"     //optional Ethereum price
-    }
-   }
+  }
 
 Note that the only required elements are amount and terminalName.  And because
 this is a terminal request, we'll first need to translate the terminal name
@@ -187,15 +178,6 @@ on port 8443.
     "request":   {
       "amount": "20.55",
       "terminalName": "Cashier #1",
-      "currencyCode": "USD",  // optional
-      "transactionRef": "0000000012",  // optional - application assigned
-      "promptForTip": false,  // optional
-      "description": "Adventures Underground Richland"  //optional
-      "test": false,  //optional
-      "altPrices": {  //optional prices in other currencies
-        "BTC": "23098",  //optional Bitcoin price (in Satoshis)
-        "ETH": "234"     //optional Ethereum price
-      }
      }
   }
 
@@ -205,7 +187,6 @@ on port 8443.
   {
     "approved":true,
     "partialAuth": false,
-    "transactionRef": "0000000012",
     "authorizedAmount": "20.55",
     "requestedAmount": "20.55",
     "tipAmount": "0.00",
@@ -921,3 +902,31 @@ transaction volume by card brand.
     }
 
   }
+
+Asynchronous Transactions
+-------------------------
+
+By default, BlockChyp transactions are synchronous with configurable timeouts.
+For some scenarios, like pay-at-the-table, this may not be the best option and
+authorizations will need to be asynchronous.  SDK's should expose async versions
+of charge, preauth, enroll, and refund. For example...
+
+- asyncCharge()
+- asyncPreauth()
+- asyncRefund()
+- asyncEnroll()
+
+These methods should be valid for terminal based transactions only and developers
+are required to set a transactionRef value for these transactions.  Since the
+async methods return before a transaction response, the transaction ref can be used to
+look up a response.
+
+SDK's should expose a method called **txStatus()** that can lookup a transaction by its
+id or transactionRef.
+
+Developers can poll this method to determine the outcome of a transaction.  SDK's
+developers are also encouraged to make use of language specific concurrency features
+to notify clients applications when a transaction finally completes.  For example,
+a Javascript SDK could take advantage of promises or callbacks.  The async methods
+in our Go SDK accept channels as parameters and these channels are notified when
+transactions complete.
