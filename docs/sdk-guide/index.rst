@@ -39,7 +39,6 @@ terminal and a selection of test cards.  Don't forget to give us your T-Shirt si
 
 .. warning::   For the time being access to BlockChyp is by invitation only.  Contact us for an invite code.
 
-
 Blockchain Stuff
 ----------------
 
@@ -51,7 +50,6 @@ and terminal firmware.  You and your developers don't need to worry about any of
 Certain transaction types, like gift card and cryptocurrency transactions, will
 return some blockchain information - like transaction hashes - but you can treat
 them just like normal passthrough identifiers.
-
 
 The Transactions
 ----------------
@@ -178,7 +176,7 @@ on port 8443.
     "request":   {
       "amount": "20.55",
       "terminalName": "Cashier #1",
-     }
+    }
   }
 
   Response:
@@ -204,6 +202,7 @@ on port 8443.
       "IAD": "B17C939DEA2B3A5D3030",
       "ARC": "3030"
     }
+  }
 
 In this example, the original request from the client is wrapped in an outer JSON
 structure called a Terminal Request and then sent directly to the local terminal
@@ -224,7 +223,6 @@ the terminal with each request ensure that the point-of-sale system or client ap
 has the merchant's permission to run transactions against the terminal.  The gateway
 ensures that both the terminal and the API credentials belong to the same merchant, or
 the transaction is rejected.
-
 
 
 Transaction Routing
@@ -272,7 +270,6 @@ gateway traffic is intercepted.  The bearer tokens protect credentials in the ev
 the symmetric encryption keys used to encrypt the signing keys are breached.
 
 They work together.  It's called teamwork.
-
 
 SSL On Local Networks
 ---------------------
@@ -409,8 +406,8 @@ deal directly with payment methods.
     // and foreign exchange spot prices are used.
     // Only valid for terminal transactions.
     "altPrices": {
-      "BTC": "23098",  //optional Bitcoin price (in Satoshis)
-      "ETH": "234"     //optional Ethereum price
+      "BTC": "23098", // optional Bitcoin price (in Satoshis)
+      "ETH": "234"    // optional Ethereum price
     }
   }
 
@@ -469,16 +466,16 @@ All authorization request have the same response format as shown below:
     // paid in cryptocurrency.
     "currencyCode": "USD",
 
-    //The card entry method.  e.g. CHIP, SWIPE, KEYED, APPLEPAY, TOKEN, NFC.
+    // The card entry method.  e.g. CHIP, SWIPE, KEYED, APPLEPAY, TOKEN, NFC.
     "entryMethod": "CHIP",
 
-    //The payment method type. e.g. VISA, MC, AMEX, DISC, GIFT, GRAFT.
+    // The payment method type. e.g. VISA, MC, AMEX, DISC, GIFT, GRAFT.
     "paymentType": "VISA",
 
-    //Masked account number
+    // Masked account number
     "maskedPan": "************0119,"
 
-    //Transaction Type
+    // Transaction Type
     "transactionType": "charge",
 
     // Authorization Code from the card issuer.
@@ -524,13 +521,12 @@ method into a reusable token.
 **Enrollment Request**::
 
   {
-
     // name assigned to the terminal at activation
     "terminalName": "Cashier #1",
 
     // magnetic stripe tracks for conventional transactions
-    "track1": "",  // MSR track 1
-    "track2": "",  // MSR track 2
+    "track1": "", // MSR track 1
+    "track2": "", // MSR track 2
 
     // primary account number for keyed or e-commerce transactions
     "pan": "4111111111111111",
@@ -549,7 +545,6 @@ method into a reusable token.
     // flags the transaction as a test transaction
     // only valid with test api credentials
     "test": false
-
   }
 
 The response to an enroll transaction is shown below:
@@ -573,16 +568,16 @@ The response to an enroll transaction is shown below:
     // The application assigned transaction reference returned in the response
     "transactionRef": "0000000012",
 
-    //The card entry method.  e.g. CHIP, SWIPE, KEYED, APPLEPAY, TOKEN, NFC.
+    // The card entry method.  e.g. CHIP, SWIPE, KEYED, APPLEPAY, TOKEN, NFC.
     "entryMethod": "CHIP",
 
-    //The payment method type. e.g. VISA, MC, AMEX, DISC, GIFT, GRAFT.
+    // The payment method type. e.g. VISA, MC, AMEX, DISC, GIFT, GRAFT.
     "paymentType": "VISA",
 
-    //Masked account number
+    // Masked account number
     "maskedPan": "************0119,"
 
-    //Transaction Type
+    // Transaction Type
     "transactionType": "enroll",
 
     // Indicates whether the transactions triggers the BlockChyp scope alert
@@ -603,7 +598,6 @@ The response to an enroll transaction is shown below:
     }
   }
 
-
 **Preauth Capture**
 *******************
 
@@ -613,7 +607,6 @@ in the original preauth.
 **Capture Request**::
 
   {
-
     // primary currency for the transaction
     "currencyCode": "USD",
 
@@ -635,7 +628,6 @@ in the original preauth.
     // flags the transaction as a test transaction
     // only valid with test api credentials
     "test": false,
-
   }
 
 **Capture Response**::
@@ -654,24 +646,22 @@ in the original preauth.
     // The application assigned transaction reference returned in the response
     "transactionRef": "0000000012",
 
-    //The card entry method.  e.g. CHIP, SWIPE, KEYED, APPLEPAY, TOKEN, NFC.
+    // The card entry method.  e.g. CHIP, SWIPE, KEYED, APPLEPAY, TOKEN, NFC.
     "entryMethod": "CHIP",
 
-    //The payment method type. e.g. VISA, MC, AMEX, DISC, GIFT, GRAFT.
+    // The payment method type. e.g. VISA, MC, AMEX, DISC, GIFT, GRAFT.
     "paymentType": "VISA",
 
-    //Masked account number
+    // Masked account number
     "maskedPan": "************0119,"
 
-    //Transaction Type
+    // Transaction Type
     "transactionType": "capture",
 
     // For BlockChyp cards (usually gift cards), the card's compressed
     // public key.
     "publicKey": "...",
-
   }
-
 
 **Void Preauth**
 ****************
@@ -681,7 +671,6 @@ Voids are used to discard a previous preauth.  They're like captures in reverse.
 **Void Request**::
 
   {
-
     // primary currency for the transaction
     "currencyCode": "USD",
 
@@ -694,7 +683,6 @@ Voids are used to discard a previous preauth.  They're like captures in reverse.
     // flags the transaction as a test transaction
     // only valid with test api credentials
     "test": false,
-
   }
 
 **Void Response**::
@@ -713,22 +701,21 @@ Voids are used to discard a previous preauth.  They're like captures in reverse.
     // The application assigned transaction reference returned in the response
     "transactionRef": "0000000012",
 
-    //The card entry method.  e.g. CHIP, SWIPE, KEYED, APPLEPAY, TOKEN, NFC.
+    // The card entry method.  e.g. CHIP, SWIPE, KEYED, APPLEPAY, TOKEN, NFC.
     "entryMethod": "CHIP",
 
-    //The payment method type. e.g. VISA, MC, AMEX, DISC, GIFT, GRAFT.
+    // The payment method type. e.g. VISA, MC, AMEX, DISC, GIFT, GRAFT.
     "paymentType": "VISA",
 
-    //Masked account number
+    // Masked account number
     "maskedPan": "************0119,"
 
-    //Transaction Type
+    // Transaction Type
     "transactionType": "void",
 
     // For BlockChyp cards (usually gift cards), the card's compressed
     // public key.
     "publicKey": "...",
-
   }
 
 **Terminal Ping**
@@ -739,7 +726,6 @@ Simple test transaction that allows connectivity with a terminal to be tested.
 **Ping Request**::
 
   {
-
     // primary currency for the transaction
     "terminalName": "Cashier #1",
 
@@ -749,7 +735,6 @@ Simple test transaction that allows connectivity with a terminal to be tested.
     // flags the transaction as a test transaction
     // only valid with test api credentials
     "test": false,
-
   }
 
 **Ping Response**::
@@ -783,7 +768,6 @@ Valid with terminals only.
 **Gift Activate Request**::
 
   {
-
     // primary currency for the transaction
     "currencyCode": "USD",
 
@@ -799,7 +783,6 @@ Valid with terminals only.
     // flags the transaction as a test transaction
     // only valid with test api credentials
     "test": false,
-
   }
 
 Gift card activation transactions return the following response:
@@ -853,14 +836,12 @@ open 24 hours a day.
 **Close Batch Request**::
 
   {
-
     // passthrough transaction identifier defined by the application.
     "transactionRef": "0000000012",
 
     // flags the transaction as a test transaction
     // only valid with test api credentials
     "test": false,
-
   }
 
 The close batch response includes simple approval data and a summary of
@@ -869,7 +850,6 @@ transaction volume by card brand.
 **Close Batch Response**::
 
   {
-
     // Transaction ID assigned by BlockChyp.  Needed for voids and preauth
     // capture transactions.
     "transactionId": "ASDASERERE", // BlockChyp assigned transaction ID.
@@ -893,14 +873,13 @@ transaction volume by card brand.
     // open preauthorization
     "openPreauths": "345.34",
 
-    //captured total breakdown by card brand
+    // captured total breakdown by card brand
     "cardBrands": {
       "VISA": "234.45",
       "MC": "400.00",
       "AMEX": "300.00",
       "DISC": "300.00"
     }
-
   }
 
 Asynchronous Transactions
