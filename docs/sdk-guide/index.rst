@@ -37,7 +37,7 @@ terminal.  Sign up for a BlockChyp developer account `here <https://dashboard.de
 and order a BlockChyp Developer Kit.  The kit will include a real life payment
 terminal and a selection of test cards.  Don't forget to give us your T-Shirt size.
 
-.. warning::   For the time being access to BlockChyp is by invitation only.  Contact us for an invite code.
+.. note::  For the time being access to BlockChyp is by invitation only.  Contact us for an invite code.
 
 Blockchain Stuff
 ----------------
