@@ -20,8 +20,8 @@ more often than not - overly complex, poorly documented, and when you run into
 trouble, straight answers from the payment companies are rare.
 
 Our goal is the make sure developers using an SDK have to do as little as
-possible.  Business logic and all the logic about how transactions are routed
-should be totally encapsulated by the SDK.
+possible.  Transactions routing and settlement logic should be totally
+encapsulated by the SDK.
 
 A developer should be able to pass a simple payment request into your SDK, and
 your SDK should automatically figure out whether or not to route the transaction
@@ -420,8 +420,8 @@ routed directly to the BlockChyp gateway.  The CVV, expiration data, address, po
 code and cardholder name are relevant only for transactions using the primary
 account number.
 
-**Note that we strongly recommend that developers avoid sending track data or
-primary account numbers.  Doing so will trigger the BlockChyp Scope Alert feature
+**We strongly recommend that developers avoid sending track data or primary
+account numbers.  Doing so will trigger the BlockChyp Scope Alert feature
 and flag the merchant account as being in scope for PCI.**
 
 All authorization request have the same response format as shown below:
