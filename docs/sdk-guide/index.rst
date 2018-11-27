@@ -361,7 +361,7 @@ deal directly with payment methods.
     "terminalName": "Cashier #1",
 
     // Reusable payment token obtained from a previous enroll transaction
-    "token": "XXXXXXXX", // reusable token
+    "token": "XXXXXXXX",
 
     // Magnetic stripe tracks for conventional transactions
     "track1": "",  // MSR track 1
@@ -524,14 +524,14 @@ method into a reusable token.
     // Name assigned to the terminal at activation
     "terminalName": "Cashier #1",
 
-    // magnetic stripe tracks for conventional transactions
+    // Magnetic stripe tracks for conventional transactions
     "track1": "", // MSR track 1
     "track2": "", // MSR track 2
 
     // Primary account number for keyed or e-commerce transactions
     "pan": "4111111111111111",
 
-    // verification fields for keyed or e-commerce transactions
+    // Verification fields for keyed or e-commerce transactions
     "cardholderName": "John Doe",
     "expMonth": "12", // Expiration month (MM)
     "expYear": "2020", // Expiration year (YYYY)
