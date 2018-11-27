@@ -351,54 +351,54 @@ deal directly with payment methods.
 **Authorization Request**::
 
   {
-    // primary currency for the transaction
+    // Primary currency for the transaction
     "currencyCode": "USD",
 
-    // string encoded amount in the primary currency
+    // String encoded amount in the primary currency
     "amount": "20.55",
 
-    // name assigned to the terminal at activation
+    // Name assigned to the terminal at activation
     "terminalName": "Cashier #1",
 
-    // reusable payment token obtained from a previous enroll transaction
+    // Reusable payment token obtained from a previous enroll transaction
     "token": "XXXXXXXX", // reusable token
 
-    // magnetic stripe tracks for conventional transactions
+    // Magnetic stripe tracks for conventional transactions
     "track1": "",  // MSR track 1
     "track2": "",  // MSR track 2
 
-    // primary account number for keyed or e-commerce transactions
+    // Primary account number for keyed or e-commerce transactions
     "pan": "4111111111111111",
 
-    // verification fields for keyed or e-commerce transactions
+    // Verification fields for keyed or e-commerce transactions
     "cardholderName": "John Doe",
-    "expMonth": "12", // expiration month (MM)
-    "expYear": "2020", // expiration year (YYYY)
+    "expMonth": "12", // Expiration month (MM)
+    "expYear": "2020", // Expiration year (YYYY)
     "cvv": "000", // CVV code
     "address": "5453 Ridgeline, Suite 160, Kennewick, WA  00000",
     "postalCode": "00000",
 
-    // if true, the payment method will also be saved and tokenized after
+    // Ff true, the payment method will also be saved and tokenized after
     // authorization
     "enroll": false,
 
-    // passthrough transaction identifier defined by the application.
+    // Passthrough transaction identifier defined by the application.
     "transactionRef": "0000000012",
 
-    // for terminal transactions, the consumer will be prompted to add a tip
+    // For terminal transactions, the consumer will be prompted to add a tip
     "promptForTip": false,
 
-    // optional tax amount
+    // Optional tax amount
     "taxAmount": "0.00",
 
-    // tip amount, if known at authorization time
+    // Tip amount, if known at authorization time
     "tipAmount": "0.00",
 
-    // optional description for the consumer's credit card statement
+    // Optional description for the consumer's credit card statement
     "description": "Adventures Underground Richland"
 
-    // flags the transaction as a test transaction
-    // only valid with test api credentials
+    // Flags the transaction as a test transaction
+    // Only valid with test api credentials
     "test": false,
 
     // If the merchant has set foreign exchange or cryptocurrency
@@ -406,8 +406,8 @@ deal directly with payment methods.
     // and foreign exchange spot prices are used.
     // Only valid for terminal transactions.
     "altPrices": {
-      "BTC": "23098", // optional Bitcoin price (in Satoshis)
-      "ETH": "234"    // optional Ethereum price
+      "BTC": "23098", // Optional Bitcoin price (in Satoshis)
+      "ETH": "234"    // Optional Ethereum price
     }
   }
 
@@ -432,7 +432,7 @@ All authorization request have the same response format as shown below:
     // Indicates whether or not the transaction was approved.
     "approved": true,
 
-    // Flag indicating that the approval was a partial authorization.
+    // Indicates whether or not approval was a partial authorization.
     "partialAuth": false,
 
     // Narrative description of the response.
@@ -521,29 +521,29 @@ method into a reusable token.
 **Enrollment Request**::
 
   {
-    // name assigned to the terminal at activation
+    // Name assigned to the terminal at activation
     "terminalName": "Cashier #1",
 
     // magnetic stripe tracks for conventional transactions
     "track1": "", // MSR track 1
     "track2": "", // MSR track 2
 
-    // primary account number for keyed or e-commerce transactions
+    // Primary account number for keyed or e-commerce transactions
     "pan": "4111111111111111",
 
     // verification fields for keyed or e-commerce transactions
     "cardholderName": "John Doe",
-    "expMonth": "12", // expiration month (MM)
-    "expYear": "2020", // expiration year (YYYY)
+    "expMonth": "12", // Expiration month (MM)
+    "expYear": "2020", // Expiration year (YYYY)
     "cvv": "000", // CVV code
     "address": "5453 Ridgeline, Suite 160, Kennewick, WA  00000",
     "postalCode": "00000",
 
-    // passthrough transaction identifier defined by the application.
+    // Passthrough transaction identifier defined by the application.
     "transactionRef": "0000000012",
 
-    // flags the transaction as a test transaction
-    // only valid with test api credentials
+    // Flags the transaction as a test transaction
+    // Only valid with test api credentials
     "test": false
   }
 
@@ -607,26 +607,26 @@ in the original preauth.
 **Capture Request**::
 
   {
-    // primary currency for the transaction
+    // Primary currency for the transaction
     "currencyCode": "USD",
 
-    // transaction id
+    // Transaction ID
     "transactionId": "....",
 
-    // string encoded amount in the primary currency
+    // String encoded amount in the primary currency
     "amount": "20.55",
 
-    // passthrough transaction identifier defined by the application.
+    // Passthrough transaction identifier defined by the application.
     "transactionRef": "0000000012",
 
-    // optional tax amount
+    // Optional tax amount
     "taxAmount": "0.00",
 
-    // tip amount, if known at authorization time
+    // Tip amount, if known at authorization time
     "tipAmount": "0.00",
 
-    // flags the transaction as a test transaction
-    // only valid with test api credentials
+    // Flags the transaction as a test transaction
+    // Only valid with test api credentials
     "test": false,
   }
 
@@ -671,17 +671,17 @@ Voids are used to discard a previous preauth.  They're like captures in reverse.
 **Void Request**::
 
   {
-    // primary currency for the transaction
+    // Primary currency for the transaction
     "currencyCode": "USD",
 
-    // transaction id
+    // Transaction id
     "transactionId": "....",
 
-    // passthrough transaction identifier defined by the application.
+    // Passthrough transaction identifier defined by the application.
     "transactionRef": "0000000012",
 
-    // flags the transaction as a test transaction
-    // only valid with test api credentials
+    // Flags the transaction as a test transaction
+    // Only valid with test api credentials
     "test": false,
   }
 
@@ -726,14 +726,14 @@ Simple test transaction that allows connectivity with a terminal to be tested.
 **Ping Request**::
 
   {
-    // primary currency for the transaction
+    // Primary currency for the transaction
     "terminalName": "Cashier #1",
 
-    // passthrough transaction identifier defined by the application.
+    // Passthrough transaction identifier defined by the application.
     "transactionRef": "0000000012",
 
-    // flags the transaction as a test transaction
-    // only valid with test api credentials
+    // Flags the transaction as a test transaction
+    // Only valid with test api credentials
     "test": false,
   }
 
@@ -746,10 +746,10 @@ Simple test transaction that allows connectivity with a terminal to be tested.
     // ISO 8601 formatted timestamp
     "timestamp": "2008-09-15T15:53:00Z",
 
-    // returns the name of the merchant paired with the terminal
+    // Returns the name of the merchant paired with the terminal
     "merchantName": "Adventures Underground",
 
-    // returns the name assigned to the terminal
+    // Returns the name assigned to the terminal
     "terminalName": "Cashier #1",
 
     // Indicates whether or not the terminal request was routed through
@@ -768,20 +768,20 @@ Valid with terminals only.
 **Gift Activate Request**::
 
   {
-    // primary currency for the transaction
+    // Primary currency for the transaction
     "currencyCode": "USD",
 
-    // amount to add to the gift card
+    // Amount to add to the gift card
     "amount": "50.00",
 
-    // name assigned to the terminal at activation
+    // Name assigned to the terminal at activation
     "terminalName": "Cashier #1",
 
-    // passthrough transaction identifier defined by the application.
+    // Passthrough transaction identifier defined by the application.
     "transactionRef": "0000000012",
 
-    // flags the transaction as a test transaction
-    // only valid with test api credentials
+    // Flags the transaction as a test transaction
+    // Only valid with test api credentials
     "test": false,
   }
 
@@ -836,11 +836,11 @@ open 24 hours a day.
 **Close Batch Request**::
 
   {
-    // passthrough transaction identifier defined by the application.
+    // Passthrough transaction identifier defined by the application.
     "transactionRef": "0000000012",
 
-    // flags the transaction as a test transaction
-    // only valid with test api credentials
+    // Flags the transaction as a test transaction
+    // Only valid with test api credentials
     "test": false,
   }
 
@@ -854,26 +854,26 @@ transaction volume by card brand.
     // capture transactions.
     "transactionId": "ASDASERERE", // BlockChyp assigned transaction ID.
 
-    // batch identifier
+    // Batch identifier
     "batchId": "12321321321",
 
-    // passthrough transaction identifier defined by the application.
+    // Passthrough transaction identifier defined by the application.
     "transactionRef": "0000000012",
 
-    // flags the transaction as a test transaction
-    // only valid with test api credentials
+    // Flags the transaction as a test transaction
+    // Only valid with test api credentials
     "test": false,
 
-    // currency code for the batch
+    // Currency code for the batch
     "currencyCode": "USD",
 
-    // captured total
+    // Captured total
     "capturedTotal": "1234.45",
 
-    // open preauthorization
+    // Open preauthorization
     "openPreauths": "345.34",
 
-    // captured total breakdown by card brand
+    // Captured total breakdown by card brand
     "cardBrands": {
       "VISA": "234.45",
       "MC": "400.00",
