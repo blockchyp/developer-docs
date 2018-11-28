@@ -246,12 +246,12 @@ BlockChyp merchant credentials don't have silly things like MID's.  A given merc
 can have any number of unique credentials with restricted permissions.  In
 BlockChyp, credentials take the form of three values:
 
-- **API Key**: Static value that identifies the merchant.
- (``e.g.: CINR73MIHX337KMRHW7BI5I2AM``)
-- **Bearer Token**:  A magic token that goes along with the API Key.
- (``e.g.: JTLQJNLSM4IGCKJC2MK7COW2VA``)
-- **Signing Key**: Magic signing key used to create HMAC headers for API requests.
- (``e.g.: c7722b911f9821e742f248af8449f12f06304c18b48b902f7cdef3d9dea7ed34``)
+- | **API Key**: Static value that identifies the merchant.
+  | ``e.g.: CINR73MIHX337KMRHW7BI5I2AM``
+- | **Bearer Token**:  A magic token that goes along with the API Key.
+  | ``e.g.: JTLQJNLSM4IGCKJC2MK7COW2VA``
+- | **Signing Key**: Magic signing key used to create HMAC headers for API requests.
+  | ``e.g.: c7722b911f9821e742f248af8449f12f06304c18b48b902f7cdef3d9dea7ed34``
 
 What are all these credentials for?  We're glad you asked. Here at BlockChyp HQ,
 we believe in defense in depth and we use three credentials instead of two in
