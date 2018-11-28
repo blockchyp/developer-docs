@@ -492,6 +492,13 @@ All authorization request have the same response format as shown below:
     // ECDSA signature for terminal transactions, signed by the terminal.
     "sig": "c7722b911f9821e742f248af8449f12f06304c18b48b902f7cdef3d9dea7ed34",
 
+    // Hash of the most recent tick block on the BlockChyp clockchain.
+    // Most developers can ignore this
+    "latestTickBlock": "....",
+
+    // ISO 8601 formatted timestamp
+    "timestamp": "2008-09-15T15:53:00Z",
+
     // A list of EMV tags we recommend developers put on their receipts.
     "receiptSuggestions:" {
       // Application ID.  Required on all receipts per EMV.
