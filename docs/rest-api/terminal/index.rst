@@ -20,7 +20,7 @@ screen and in a few moments the terminal will display a six character activation
 code.  Enter the code in the Dashboard's activation form along with a unique
 name you'd like to use for the terminal.
 
-That's it.
+The terminal will now be ready for transactions.
 
 
 Web Server Ports
@@ -41,7 +41,7 @@ SSL/TLS
 -------
 
 Because terminals run on private networks, conventional SSL or TLS based on
-the major certificate authorities is not support.  When BlockChyp terminals are
+the major certificate authorities is not supported.  When BlockChyp terminals are
 activated, a unique certificate is generated and signed by BlockChyp's own
 root certificate authority.
 
@@ -99,10 +99,10 @@ You can refer to terminals by their IP address or host names if you've configure
 them for your network.  We recommend avoiding the use of manual IP address
 configuration in your systems as IP addresses can be obtained on demand from the
 Payment Gateway's **Terminal Route** API.  This API returns the current private
-IP address and provides for a more robust implementation in the even that
+IP address and provides for a more robust implementation in the event that
 installers or merchants fail to statically configure IP addresses for terminals.
 
-**POST: https://192.168.50.245/api/charge**::
+**POST: https://<IP_ADDRESS>/api/charge**::
 
   Request:
 
@@ -149,10 +149,12 @@ Authentication
 --------------
 
 All API requests against terminals require the standard BlockChyp authentication
-credentials (API Key, Bearer Token, Signing Key).
+credentials (API Key, Bearer Token, and Signing Key).
 
 In Gateway API transactions, these values are passed in the HTTP headers.  In
-Terminal API transactions, they're passed in the body of the request.
+Terminal API transactions, they're passed in the body of the request.  The
+terminal will then use them to assemble headers for its own communication with
+the gateway.
 
 Transient Credentials
 *********************
@@ -174,7 +176,7 @@ As referenced above, the Gateway has a Terminal Route API that returns metadata
 about a specific terminal, including the terminal's IP Address and transient
 credentials.
 
-The example below shows a typical terminal route transaction.
+The example below shows a typical terminal route request.
 
 **GET: https://api.blockchyp.com/api/terminal-route?terminal=Cashier%20#1**::
 
@@ -249,12 +251,419 @@ Charge (/api/charge)
 --------------------
 
 :HTTP Method: POST
-:URI:  /api/test
+:URI:  /api/charge
 
+Executes a direct auth and capture.  The terminal prompts for a payment method,
+the user presents a method of payment and the API returns the authorization status
+and details about the payment method.
+
+.. note::  Sensitive information like track data or account numbers are never returned by any BlockChyp API.
+
+
+Sample Request and Response::
+
+  Request:
+
+  GET /api/charge HTTP/1.1
+  Host: 192.168.50.245
+
+  {
+    "apiKey":"3KLZKRWVOSL2I5ZTKR7ANM23VA",
+    "bearerToken":"LAAQPFNCQKDY5UGWDWTSUFFYWA",
+    "signingKey":"092019fcff1fef3f93fa25aa2680b760748fa97f7ae0721807d91b55dc52aadf",
+    "request": {
+
+      // application defined transaction identifier, up to 64 characters in length
+      // optional, but recommended since time out reversals won't work without it
+      "transactionRef": "b944f032e997d944cdabb03cf1aa260ba3cde3d3b572b138eceb27bb41e54332",
+
+      // flags this as a test transaction - no real money will change hands
+      "test": false,
+
+      // name of the terminal - optional
+      "terminalName":"Desk Terminal",
+
+      // ISO three character currency code, optional, defaults to USD
+      "currencyCode": "USD",
+
+      // total amount to authorize
+      "amount":"12.67",
+
+      // optional tip amount, if known
+      "tipAmount":"0.00",
+
+      // optional tax amount, if known
+      "taxAmount":"0.00",
+
+      // if true, the user will be prompted to add a tip before presenting
+      // their payment card
+      "promptForTip":false,
+
+      // if true, the payment method will be tokenized for use in future
+      // transactions
+      "enroll": false,
+
+      // an optional description for the transaction
+      // for credit card transactions, this will appear on the statement
+      "description": "Comic Books"
+    }
+  }
+
+  Response:
+
+  HTTP/1.1 200 OK
+  {
+
+    // whether or not the transaction when through
+    "approved":true,
+
+    // narrative description of the response
+    "responseDescription": "Approved",
+
+    // authorization code
+    "authCode":"054321",
+
+    // indicates whether or not the authorized amount was less than the requested amount
+    "partialAuth":false,
+
+    // the final requested amount
+    // this could be more than the original request's amount if you prompted
+    // the user for a tip.
+    "requestedAmount":"12.67",
+
+    // amount authorized by the payment network
+    "authorizedAmount":"12.67",
+
+    // tip amount, could be different if you prompted the user for a tip
+    "tipAmount":"0.00",
+
+    // tax amount from the original request echoed back
+    "taxAmount":"0.00",
+
+    // currency for the authorization
+    "currencyCode":"USD",
+
+    // for conventional credit card transactions, the BlockChyp assigned batch id
+    "batchId": "UEOHSRX2MYI6RA2WSSDM7WZLHE",
+
+    // original transaction reference, echoed back
+    "transactionRef": "b944f032e997d944cdabb03cf1aa260ba3cde3d3b572b138eceb27bb41e54332",
+
+    // original test flag setting, echoed back
+    "test": false,
+
+    // BlockChyp assigned transaction Id.  Use this in any subsequent void requests.
+    "transactionId":"UEOHSRX2MYI6RA2LNSLM7WZLHE",
+
+    // transaction type, echoed back
+    "transactionType":"charge",
+
+    // timestamp of the transaction in UTC
+    "timestamp":"2018-12-07T21:25:37Z",
+
+    // hash of the latest tick block on the BlockChyp clockchain
+    // this is essentially blockchain time
+    "tickBlock":"000a40ada947bd35886f19c8908cd84e521f713cc2637c0bf70b3b2ea63ffe7d",
+
+    // could be CHIP, SWIPE, APPLEPAY, etc
+    "entryMethod":"CHIP",
+
+    // could be VISA, MC, DISC, AMEX, or GIFT
+    "paymentType":"VISA",
+
+    // masked account number with just the last four digits visible
+    "maskedPan":"************0119",
+
+
+    // reusable payment token, if requested by setting the enroll flag to "true"
+    "token": "",
+
+    // public key for BlockChyp gift cards
+    "publicKey": "",
+
+
+    "receiptSuggestions":{
+      // EMV Application Identifier - required on all EMV receipts
+      "AID":"A0000000031010",
+
+      // Application Request Cryptogram - digital signature for an EMV transaction
+      "ARQC":"6218309BF7D48CC7",
+
+      // Issuer Application Data
+      "IAD":"06010A03A0A800",
+
+      // Terminal Verification Results
+      "TVR":"8000008000",
+
+      // Transaction Status Indicator
+      "TSI":"6800",
+
+      // if true, the system should print a signature line on the receipt
+      "requestSignature":true
+    }
+
+  }
 
 
 Preauth (/api/preauth)
 ----------------------
 
+:HTTP Method: POST
+:URI:  /api/preauth
+
+Executes a preauthorization.  The terminal prompts for a payment method,
+the user presents a method of payment and the API returns the authorization status
+and details about the payment method.
+
+.. note::  Must be captured later with a gateway **capture** transaction.
+
+.. note::  Sensitive information like track data or account numbers are never returned by any BlockChyp API.
+
+
+Sample Request and Response::
+
+  Request:
+
+  GET /api/preauth HTTP/1.1
+  Host: 192.168.50.245
+
+  {
+    "apiKey":"3KLZKRWVOSL2I5ZTKR7ANM23VA",
+    "bearerToken":"LAAQPFNCQKDY5UGWDWTSUFFYWA",
+    "signingKey":"092019fcff1fef3f93fa25aa2680b760748fa97f7ae0721807d91b55dc52aadf",
+    "request": {
+
+      // application defined transaction identifier, up to 64 characters in length
+      // optional, but recommended since time out reversals won't work without it
+      "transactionRef": "b944f032e997d944cdabb03cf1aa260ba3cde3d3b572b138eceb27bb41e54332",
+
+      // flags this as a test transaction - no real money will change hands
+      "test": false,
+
+      // name of the terminal - optional
+      "terminalName":"Desk Terminal",
+
+      // ISO three character currency code, optional, defaults to USD
+      "currencyCode": "USD",
+
+      // total amount to authorize
+      "amount":"12.67",
+
+      // optional tip amount, if known
+      "tipAmount":"0.00",
+
+      // optional tax amount, if known
+      "taxAmount":"0.00",
+
+      // if true, the user will be prompted to add a tip before presenting
+      // their payment card
+      "promptForTip":false,
+
+      // if true, the payment method will be tokenized for use in future
+      // transactions
+      "enroll": false,
+
+      // an optional description for the transaction
+      // for credit card transactions, this will appear on the statement
+      "description": "Comic Books"
+    }
+  }
+
+  Response:
+
+  HTTP/1.1 200 OK
+  {
+
+    // whether or not the transaction when through
+    "approved":true,
+
+    // narrative description of the response
+    "responseDescription": "Approved",
+
+    // authorization code
+    "authCode":"054321",
+
+    // indicates whether or not the authorized amount was less than the requested amount
+    "partialAuth":false,
+
+    // the final requested amount
+    // this could be more than the original request's amount if you prompted
+    // the user for a tip - which would almost never happen with a preauth
+    "requestedAmount":"12.67",
+
+    // amount authorized by the payment network
+    "authorizedAmount":"12.67",
+
+    // tip amount, could be different if you prompted the user for a tip
+    "tipAmount":"0.00",
+
+    // tax amount from the original request echoed back
+    "taxAmount":"0.00",
+
+    // currency for the authorization
+    "currencyCode":"USD",
+
+    // for conventional credit card transactions, the BlockChyp assigned batch id
+    "batchId": "UEOHSRX2MYI6RA2WSSDM7WZLHE",
+
+    // original transaction reference, echoed back
+    "transactionRef": "b944f032e997d944cdabb03cf1aa260ba3cde3d3b572b138eceb27bb41e54332",
+
+    // original test flag setting, echoed back
+    "test": false,
+
+    // BlockChyp assigned transaction Id.  Use this in any subsequent voids or capture requests.
+    // Required to capture the transaction later.
+    "transactionId":"UEOHSRX2MYI6RA2LNSLM7WZLHE",
+
+    // transaction type, echoed back
+    "transactionType":"preauth",
+
+    // timestamp of the transaction in UTC
+    "timestamp":"2018-12-07T21:25:37Z",
+
+    // hash of the latest tick block on the BlockChyp clockchain
+    // this is essentially blockchain time
+    "tickBlock":"000a40ada947bd35886f19c8908cd84e521f713cc2637c0bf70b3b2ea63ffe7d",
+
+    // could be CHIP, SWIPE, APPLEPAY, etc
+    "entryMethod":"CHIP",
+
+    // could be VISA, MC, DISC, AMEX, or GIFT
+    "paymentType":"VISA",
+
+    // masked account number with just the last four digits visible
+    "maskedPan":"************0119",
+
+
+    // reusable payment token, if requested by setting the enroll flag to "true"
+    "token": "",
+
+    // public key for BlockChyp gift cards
+    "publicKey": "",
+
+
+    "receiptSuggestions":{
+      // EMV Application Identifier - required on all EMV receipts
+      "AID":"A0000000031010",
+
+      // Application Request Cryptogram - digital signature for an EMV transaction
+      "ARQC":"6218309BF7D48CC7",
+
+      // Issuer Application Data
+      "IAD":"06010A03A0A800",
+
+      // Terminal Verification Results
+      "TVR":"8000008000",
+
+      // Transaction Status Indicator
+      "TSI":"6800",
+
+      // if true, the system should print a signature line on the receipt
+      "requestSignature":true
+    }
+
+  }
+
+
 Gift Activate (/api/gift-activate)
 ----------------------------------
+
+:HTTP Method: POST
+:URI:  /api/gift-activate
+
+Activates or adds value to a BlockChyp gift card.  The terminal will prompt
+the user to swipe a gift card and the amount specified will be added to it.
+
+.. note::  This only works with official BlockChyp gift cards.  All developer kits include test gift cards and merchant can order custom gift cards with their own branding.
+
+Sample Request and Response::
+
+  Request:
+
+  GET /api/gift-activate HTTP/1.1
+  Host: 192.168.50.245
+
+  {
+    "apiKey":"3KLZKRWVOSL2I5ZTKR7ANM23VA",
+    "bearerToken":"LAAQPFNCQKDY5UGWDWTSUFFYWA",
+    "signingKey":"092019fcff1fef3f93fa25aa2680b760748fa97f7ae0721807d91b55dc52aadf",
+    "request": {
+
+      // optional transaction ref
+      "transactionRef": "b944f032e997d944cdabb03cf1aa260ba3cde3d3b572b138eceb27bb41e54332",
+
+      // flags this as a test transaction - transaction will go on the test blockchain
+      "test": false,
+
+      // name of the terminal - optional
+      "terminalName":"Desk Terminal",
+
+      // ISO three character currency code, optional, defaults to USD
+      "currencyCode": "USD",
+
+      // total amount to add to the gift card
+      "amount":"25.00"
+
+    }
+  }
+
+  Response:
+
+  HTTP/1.1 200 OK
+  {
+
+    // whether or not the transaction when through
+    "approved":true,
+
+    // narrative description of the response
+    "responseDescription": "Approved",
+
+    // amount added to the gift card
+    "amount": "25.00",
+
+    // total balance on the card after the amount has been added
+    // also displayed on the terminal after authorization
+    "currentBalance": "25.00",
+
+    // currency for the authorization
+    "currencyCode":"USD",
+
+    // original transaction reference, echoed back
+    "transactionRef": "b944f032e997d944cdabb03cf1aa260ba3cde3d3b572b138eceb27bb41e54332",
+
+    // original test flag setting, echoed back
+    "test": false,
+
+    // BlockChyp assigned transaction id.  Use this in any subsequent voids or capture requests.
+    // Required to capture the transaction later.
+    "transactionId":"UEOHSRX2MYI6RA2LNSLM7WZLHE",
+
+    // transaction type, echoed back
+    "transactionType":"gift-activate",
+
+    // timestamp of the transaction is UTC
+    "timestamp":"2018-12-07T21:25:37Z",
+
+    // hash of the latest tick block on the BlockChyp clockchain
+    // this is essentially blockchain time
+    "tickBlock":"000a40ada947bd35886f19c8908cd84e521f713cc2637c0bf70b3b2ea63ffe7d",
+
+    // public key for the gift card
+    "publicKey": "342a40ada947bd35886f19c8908cd84e521f713cc2637c0bf70b3b2ea63ffe7d",
+
+  }
+
+Time Out Reversals
+------------------
+
+The terminal communicates directly with the BlockChyp gateway to obtain authorization.
+This is what keeps you out of PCI or EMV scope.  If a transaction times out or results
+in an error, the terminal will automatically send a time out reversal - which you
+or your merchants may see in the transaction logs.
+
+If a request to the terminal times out, you can send a reversal yourself by using
+the Gateway API's Reverse Endpoint.  Note that this requires the use of the **transactionRef**
+field.
+
+Consult the Payment Gateway REST API Reference for more detail.
