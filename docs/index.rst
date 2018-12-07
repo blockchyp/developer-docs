@@ -12,9 +12,31 @@ SDKs and Clients
 -----------------
 
 - `Go SDK <https://github.com/blockchyp/blockchyp-go>`_
+- `Windows and Linux Binaries <https://github.com/blockchyp/blockchyp-go>`_
 - `Python SDK <https://github.com/blockchyp/blockchyp-python>`_
 - `Javascript SDK <https://github.com/blockchyp/blockchyp-js>`_
 - `Java SDK <https://github.com/blockchyp/blockchyp-java>`_
+
+REST API's
+----------
+
+We recommend developers use SDK's instead of the REST API's directly, but this is
+just to make things simpler.  Our SDK's deal with HMAC headers and locating
+terminals for you.  But if you prefer to roll your own, we won't stop you.
+The REST API's aren't complicated.  Check out the API docs below:
+
+
+
+.. toctree::
+   :maxdepth: 2
+
+   rest-api/terminal/index
+
+.. toctree::
+   :maxdepth: 2
+
+   rest-api/gateway/index
+
 
 Terminal Integration
 --------------------
