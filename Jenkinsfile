@@ -19,7 +19,7 @@ pipeline {
 
     stage('Build Docs') {
       sh 'cd docs && make html'
-      s3Upload bucket: 'blockchyp-docs-prod', acl: 'Private', workingDir: "${workspace}/docs/_build/html", includePathPattern: "**/*", path: '/'
+      sh "aws s3 sync --delete ${workspace}/docs/_build/html/ s3://blockchyp-prod-docs/"
     }
   }
 
