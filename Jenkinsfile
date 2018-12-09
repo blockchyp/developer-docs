@@ -18,8 +18,10 @@ pipeline {
     }
 
     stage('Build Docs') {
-      sh 'cd docs && make html'
-      sh "aws s3 sync --delete ${workspace}/docs/_build/html/ s3://blockchyp-prod-docs/"
+      steps {
+        sh 'cd docs && make html'
+        sh "aws s3 sync --delete ${workspace}/docs/_build/html/ s3://blockchyp-prod-docs/"
+      }
     }
   }
 
