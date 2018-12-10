@@ -220,7 +220,7 @@ Connectivity Test (/api/test)
 -----------------------------
 
 :HTTP Method: POST
-:URI:  /api/test
+:Path:  /api/test
 
 This API performs a simple connectivity test with the terminal.  A successful
 result also indicates that the credentials are suitable for performing a live
@@ -251,7 +251,7 @@ Charge (/api/charge)
 --------------------
 
 :HTTP Method: POST
-:URI:  /api/charge
+:Path:  /api/charge
 
 Executes a direct auth and capture.  The terminal prompts for a payment method,
 the user presents a method of payment and the API returns the authorization status
@@ -409,7 +409,7 @@ Preauth (/api/preauth)
 ----------------------
 
 :HTTP Method: POST
-:URI:  /api/preauth
+:Path:  /api/preauth
 
 Executes a preauthorization.  The terminal prompts for a payment method,
 the user presents a method of payment and the API returns the authorization status
@@ -570,7 +570,7 @@ Gift Activate (/api/gift-activate)
 ----------------------------------
 
 :HTTP Method: POST
-:URI:  /api/gift-activate
+:Path:  /api/gift-activate
 
 Activates or adds value to a BlockChyp gift card.  The terminal will prompt
 the user to swipe a gift card and the amount specified will be added to it.
