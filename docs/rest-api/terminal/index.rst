@@ -314,7 +314,7 @@ Sample Request and Response::
   HTTP/1.1 200 OK
   {
 
-    // whether or not the transaction when through
+    // whether or not the transaction went through
     "approved":true,
 
     // narrative description of the response
@@ -474,7 +474,7 @@ Sample Request and Response::
   HTTP/1.1 200 OK
   {
 
-    // whether or not the transaction when through
+    // whether or not the transaction went through
     "approved":true,
 
     // narrative description of the response
@@ -575,7 +575,7 @@ Gift Activate (/api/gift-activate)
 Activates or adds value to a BlockChyp gift card.  The terminal will prompt
 the user to swipe a gift card and the amount specified will be added to it.
 
-.. note::  This only works with official BlockChyp gift cards.  All developer kits include test gift cards and merchant can order custom gift cards with their own branding.
+.. note::  This only works with official BlockChyp gift cards.  All developer kits include test gift cards and merchants can order custom gift cards with their own branding.
 
 Sample Request and Response::
 
@@ -613,7 +613,7 @@ Sample Request and Response::
   HTTP/1.1 200 OK
   {
 
-    // whether or not the transaction when through
+    // whether or not the transaction went through
     "approved":true,
 
     // narrative description of the response

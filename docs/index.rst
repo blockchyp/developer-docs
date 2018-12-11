@@ -12,7 +12,7 @@ Getting Started
 ---------------------
 
 To get started with BlockChyp, sign up for a developer account on the
-`BlockChyp Web Site <https://github.com/blockchyp/blockchyp-go>`_ and order a
+`BlockChyp Web Site <https://www.blockchyp.com>`_ and order a
 BlockChyp Developer Kit.  The kit will include a fully functioning payment terminal,
 along with chip, mag stripe, and gift card test cards.
 
@@ -66,11 +66,12 @@ here as JSON:
 The response includes a number of fields consumers are used to seeing on receipts
 such as masked PAN and auth code.
 
-It also includes a receiptSuggestion section that collects all EMV fields
+It also includes a receiptSuggestions section that collects all EMV fields
 we recommend putting on your receipts.
 
 Not all card brands have the same requirements, but if you always include the
-following data elements on all receipts, your receipts will be EMV compliant.
+following data elements on all receipts, your receipts will be compliant with
+all card brand receipt requirements and recommendations.
 
 - **authCode**
 - **maskedPan**
@@ -82,9 +83,9 @@ following data elements on all receipts, your receipts will be EMV compliant.
 REST API's
 ----------
 
-We recommend developers use SDK's instead of the REST API's directly, but this is
-just to make things simpler.  Our SDK's deal with HMAC headers and locating
-terminals for you.  But if you prefer to roll your own, we won't stop you.
+We recommend developers use SDK's instead of the REST API's directly as it will
+make implementation go faster.  Our SDK's deal with HMAC authentication and locating
+terminals for you.  But if you prefer to do a direct REST API integration, we won't stop you.
 The REST API's aren't complicated.  Check out the API docs below:
 
 .. toctree::
@@ -111,7 +112,7 @@ Simulating Approvals
 *************************
 
 The BlockChyp test system will send back an approval response for any valid
-Visa, Mastercard, American Express, or Discover test card numbers except as
+Visa, Mastercard, American Express, or Discover test card number except as
 described below.
 
 
@@ -119,10 +120,10 @@ Adverse Events
 ********************
 
 We hope for approval in life, but that doesn't always happen.  BlockChyp has an
-extensible system for simulation adverse events like declines, partial
+extensible system for simulating adverse events like declines, partial
 authorizations, and other unexpected responses.
 
-BlockChyp supporst the following adverse event types:
+BlockChyp supports the following adverse event types:
 
 :decline: Authorization declined by the payment network.
 

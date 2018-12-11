@@ -6,7 +6,7 @@ Payment Gateway REST API Reference
 BlockChyp consists of two REST API's: the small API that runs on every BlockChyp
 payment terminal and the Gateway API.
 
-The BlockChyp Gateway was designed to be pretty simple.  With a few exceptions, the concepts should be
+Like everything in BlockChyp, the Gateway was designed to be simple.  With a few exceptions, the concepts should be
 familiar to anyone who's done a previous payment gateway implementation.
 
 
@@ -75,10 +75,6 @@ charge transaction using a previously enrolled recurring payment token.
 This is example shows the mechanics of a simple token based transaction using
 the common VISA test card number of 4111 1111 1111 1111.
 
-Most of the request parameters are self explanatory and include the typical
-transactions parameters like the primary account number (PAN), expiration, and
-CVV code.
-
 **transactionRef** is where you would provide your own ID for a transaction.  It's
 not required, but highly recommended because it allows you to track responses
 against your own ID scheme, and more importantly, time out reversals are not supported
@@ -121,7 +117,7 @@ This header should be a unique string with a minimum length of 16 characters.
 Developers are encouraged to use a cryptographically secure random number generator to
 produce nonces.  Nonces are checked for uniqueness in real time.
 
-The Nonce has to be sent in its own header as shown above, but also must be
+The Nonce has to be sent in its own header as shown above and also must be
 fed into the HMAC computation as part of the Authorization header.
 
 Timestamp
@@ -149,11 +145,11 @@ references BlockChyp's Dual authentication scheme.
 
 Add a space and then the API Key followed by the Bearer Token, separated by a colon.
 
-To compute the HMAC Signature, concatenate the API Key, Bearer Token, Timestamp
+To compute the HMAC Signature, first concatenate the API Key, Bearer Token, Timestamp
 and Nonce with no separator.  (This is a bit simpler than other common HMAC
 authentication schemes.)
 
-Next, compute a SHA 256 HMAC with the Signing Key and encode it as a hexadecimal string.
+Next, compute an SHA 256 HMAC with the Signing Key and encode it as a hexadecimal string.
 
 The sample code below shows how to compute an HMAC value in the Go Language.
 
@@ -256,7 +252,7 @@ be chaotic environments where recommendations aren't always followed.
 
 This API is part of a set of techniques BlockChyp uses to try and cope with
 real world merchant networks.  Terminals check in with the BlockChyp network
-when their activated and periodically throughout the day.  They report their
+when they're activated and periodically throughout the day.  They report their
 IP address on the private network along with some internal metrics used to
 monitor the overall health of the network and for fraud detection.
 
@@ -300,7 +296,7 @@ The response includes the following data elements:
 
 :ipAddress:  The current local IP address of the terminal on the private network.  If the point-of-sale or client application is on the same network as the terminal, the terminal's REST API can be found at ports 8080 and 8443 at the given IP Address.
 
-:cloudRelayEnabled: Indicates that this terminal is accessible via the Gateway.  Useful if the point-of-sale system and terminal are on different network segments.
+:cloudRelayEnabled: Indicates that this terminal is accessible via the Gateway.  Not recommended, but unavoidable if the point-of-sale system and terminal are on different network segments.
 
 :transientCredentials: Special credentials restricted for use only with the given terminal.  All direct API calls to terminals should use these credentials, especially if the merchants are  unable to run TLS/SSL on their local network.
 
@@ -377,7 +373,7 @@ transactions.
   HTTP/1.1 200 OK
   {
 
-    // whether or not the transaction when through
+    // whether or not the transaction went through
     "approved":true,
 
     // narrative description of the response
@@ -538,7 +534,7 @@ transactions.
   HTTP/1.1 200 OK
   {
 
-    // whether or not the transaction when through
+    // whether or not the transaction went through
     "approved":true,
 
     // narrative description of the response
@@ -675,7 +671,7 @@ transaction.
   HTTP/1.1 200 OK
   {
 
-    // whether or not the transaction when through
+    // whether or not the transaction went through
     "approved":true,
 
     // narrative description of the response
@@ -794,7 +790,7 @@ refer to a previous transaction ID.
   HTTP/1.1 200 OK
   {
 
-    // whether or not the transaction when through
+    // whether or not the transaction went through
     "approved":true,
 
     // narrative description of the response
@@ -895,7 +891,7 @@ charges, captures, or refunds, and to discard pending preauthorizations.
   HTTP/1.1 200 OK
   {
 
-    // whether or not the transaction when through
+    // whether or not the transaction went through
     "approved":true,
 
     // narrative description of the response
@@ -949,7 +945,7 @@ Time Out Reversal (/api/reverse)
 
 Voids transactions that may have timed out during processing.  Must be sent with
 a **transactionRef**.  If the network has a record of the transaction and the
-transaction was submitted within 2 minutes, it will be voided or reversed.
+transaction was submitted within the last 2 minutes, it will be voided or reversed.
 
 **Sample Request and Response**::
 
@@ -977,7 +973,7 @@ transaction was submitted within 2 minutes, it will be voided or reversed.
   HTTP/1.1 200 OK
   {
 
-    // whether or not the transaction when through
+    // whether or not the transaction went through
     "approved":true,
 
     // narrative description of the response
@@ -1030,10 +1026,10 @@ Close Batch (/api/close-batch)
 :Path:  /api/close-batch
 
 This transaction allows developers to execute manual batch closures.  By default,
-BlockChyp batches close every day at 4 AM local time.  Merchants can change this
+BlockChyp batches close every day at 4 AM in the merchant's local time.  Merchants can change this
 time via the dashboard and even disable automatic batch closure.
 
-Manual batch closures are sometimes needed by business with unusual hours, especially
+Manual batch closures are sometimes needed by businesses with unusual hours, especially
 24 hour businesses or night life businesses in which batches can't be closed until
 all tips have been entered for the last shift.
 
@@ -1078,7 +1074,7 @@ are recorded directly on the blockchain.
     // original test flag setting, echoed back
     "test": false,
 
-    // BlockChyp assigned transaction Id.  Use this in any subsequent void requests.
+    // BlockChyp assigned transaction Id
     "transactionId":"UEOHSRX2MYI6RA2LNSLM7WZLHE",
 
     // transaction type, echoed back
@@ -1094,7 +1090,7 @@ are recorded directly on the blockchain.
     // currency for the current batch
     "currencyCode":"USD",
 
-    // totally amount of money captured - the merchant should expect a deposit
+    // total amount of money captured - the merchant should expect a deposit
     // in this amount less processing fees
     "capturedTotal": "1712.04",
 
