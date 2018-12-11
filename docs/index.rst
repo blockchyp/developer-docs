@@ -163,6 +163,11 @@ Roll Your Own SDK
 If there's not an SDK for your favorite language or platform, checkout out our
 SDK developers guide for our advice about how to make your own.
 
+.. toctree::
+   :maxdepth: 2
+
+   sdk-guide/index
+
 Running EMV Certification Tests
 ------------------------------------
 
@@ -177,14 +182,6 @@ EMV tests.
 If you happen to have an Collis or UL EMV Test Tool and want to run real EMV
 certification tests against BlockChyp, contact us at nerds@blockchyp.com.  We'll
 connect your test merchant account to a real EMV certification back end.
-
-
-.. toctree::
-   :maxdepth: 1
-
-   sdk-guide/index
-
-
 
 
 
