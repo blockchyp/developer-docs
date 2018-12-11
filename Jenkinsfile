@@ -10,6 +10,13 @@ pipeline {
     }
   }
 
+  options {
+    withAWS(
+      role: docsDeploymentRole(),
+      roleSessionName: 'DocsDeployment',
+    )
+  }
+
   stages {
     stage('Start') {
       steps {
