@@ -26,10 +26,49 @@ SDKs and Clients
 All supported BlockChyp SDK's are open source and hosted on Github.
 
 - `Go SDK <https://github.com/blockchyp/blockchyp-go>`_
-- `Windows and Linux Binaries <https://github.com/blockchyp/blockchyp-go>`_
 - `Python SDK <https://github.com/blockchyp/blockchyp-python>`_
 - `Javascript SDK <https://github.com/blockchyp/blockchyp-js>`_
 - `Java SDK <https://github.com/blockchyp/blockchyp-java>`_
+
+What If My Platform Isn't Listed?
+----------------------------------
+
+If we don't have a client or SDK for your language or platform listed, you have
+plenty of other options.
+
+Use The Rest API's
+*********************
+
+The SDK's aren't required. We just provide them to make things a little bit simpler
+and faster for developers.  The BlockChyp Gateway and all BlockChyp terminals
+run simple REST API's you can integrate with directly.  Checkout the `Terminal REST API Reference <rest-api/terminal/index.html>`_
+and the `Payment Gateway REST API Reference <rest-api/gateway/index.html>`_ for more information.
+
+Use The Command Line
+*********************
+
+The BlockChyp Go SDK includes additional build scripts that create Windows and
+Linux command line executables that can be invoked via shell commands.
+
+More documentation on the command line can be found on the `Go SDK's Github Page <https://github.com/blockchyp/blockchyp-go>`_
+
+Build An SDK
+**********************
+
+If you're using a modern programming language that we just
+haven't gotten around to yet (like Ruby, Swift, or Rust), we'd prefer to work with you on creating an
+open source SDK for your platform.  This allows other developers in your technology ecosystem
+to benefit going forward.
+
+To develop your own SDK, check out the `SDK Developers Guide <sdk-guide/index.html>`_
+for some high level concepts and guidance.  Then use the REST API references as
+you work through the various terminal and gateway transactions.
+
+The `Go SDK <https://github.com/blockchyp/blockchyp-go>`_ is open source and serves
+as a fairly good example of what should go into a new SDK.
+
+If you're thinking of developing a new SDK, feel free to contact us at nerds@blockchyp.com.
+We'll talk through the trade offs with you and maybe pitch in ourselves.
 
 Receipt Requirements
 ------------------------
