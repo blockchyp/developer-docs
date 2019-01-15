@@ -184,23 +184,34 @@ on port 8443.
   HTTP/1.1 200 OK
   {
     "approved":true,
-    "partialAuth": false,
-    "authorizedAmount": "20.55",
-    "requestedAmount": "20.55",
-    "tipAmount": "0.00",
-    "taxAmount": "0.00",
-    "currencyCode": "USD",
-    "entryMethod": "CHIP",
-    "paymentType": "VISA",
-    "maskedPan": "************0119,"
-    "transactionType": "charge",
-    "authCode": "010119",
-    "sig": "c7722b911f9821e742f248af8449f12f06304c18b48b902f7cdef3d9dea7ed34",
-    "receiptSuggestions:" {
-      "AID": "A0000000031010",
-      "ARQC": "649A5C5FCA0CFD24",
-      "IAD": "B17C939DEA2B3A5D3030",
-      "ARC": "3030"
+    "responseDescription":"Approved",
+    "transactionId":"NZ6FGYAYLYI6TLVWNSLM7WZLHE",
+    "transactionRef":"cfd068099a4280f1f09a965d9cc522f25ef4e06a95c9a9461d59fa5deed62180",
+    "transactionType":"charge","timestamp":"2019-01-15T00:42:36Z",
+    "tickBlock":"000e61f8204a2a372cac288f833a8e0949dd50d0074d5133432dce4e78d97913",
+    "authCode":"612797",
+    "entryMethod":"CHIP",
+    "paymentType":"VISA",
+    "maskedPan":"************0010",
+    "cardHolder":"Test/Card 01              ",
+    "partialAuth":false,
+    "altCurrency":false,
+    "currencyCode":"USD",
+    "requestedAmount":"20.55",
+    "authorizedAmount":"20.55",
+    "receiptSuggestions":{
+      "AID":"A0000000031010",
+      "ARQC":"E0A09074268A87F4",
+      "IAD":"06010A03A0B800",
+      "TVR":"0240008000",
+      "TSI":"E800",
+      "merchantName":"Test Merchant",
+      "applicationLabel":"VISA CREDIT",
+      "requestSignature":true,
+      "maskedPan":"************0010",
+      "authorizedAmount":"20.55",
+      "transactionType":"charge",
+      "entryMethod":"CHIP"
     }
   }
 
@@ -499,7 +510,7 @@ All authorization request have the same response format as shown below:
     // ISO 8601 formatted timestamp
     "timestamp": "2008-09-15T15:53:00Z",
 
-    // A list of EMV tags we recommend developers put on their receipts.
+    // A list of EMV tags and fields we recommend developers put on their receipts.
     "receiptSuggestions:" {
       // Application ID.  Required on all receipts per EMV.
       "AID": "A0000000031010",
@@ -515,6 +526,15 @@ All authorization request have the same response format as shown below:
 
       // Transaction Certificate
       "TC": "B17C939DEA2B3A5D3030"
+
+      // other receipt fields
+      "merchantName":"Test Merchant",
+      "applicationLabel":"VISA CREDIT",
+      "requestSignature":true,
+      "maskedPan":"************0010",
+      "authorizedAmount":"20.55",
+      "transactionType":"charge",
+      "entryMethod":"CHIP"
     }
   }
 
@@ -600,8 +620,13 @@ The response to an enroll transaction is shown below:
 
     // A list of EMV tags we recommend developers put on their receipts.
     "receiptSuggestions:" {
-      // Application ID.
-      "AID": "A0000000031010",
+      "merchantName":"Test Merchant",
+      "applicationLabel":"VISA CREDIT",
+      "requestSignature":true,
+      "maskedPan":"************0010",
+      "authorizedAmount":"20.55",
+      "transactionType":"charge",
+      "entryMethod":"CHIP"
     }
   }
 

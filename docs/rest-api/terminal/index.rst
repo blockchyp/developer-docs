@@ -124,23 +124,34 @@ installers or merchants fail to statically configure IP addresses for terminals.
   HTTP/1.1 200 OK
   {
     "approved":true,
-    "partialAuth": false,
-    "authorizedAmount": "20.55",
-    "requestedAmount": "20.55",
-    "tipAmount": "0.00",
-    "taxAmount": "0.00",
-    "currencyCode": "USD",
-    "entryMethod": "CHIP",
-    "paymentType": "VISA",
-    "maskedPan": "************0119,"
-    "transactionType": "charge",
-    "authCode": "010119",
-    "sig": "c7722b911f9821e742f248af8449f12f06304c18b48b902f7cdef3d9dea7ed34",
-    "receiptSuggestions:" {
-      "AID": "A0000000031010",
-      "ARQC": "649A5C5FCA0CFD24",
-      "IAD": "B17C939DEA2B3A5D3030",
-      "ARC": "3030"
+    "responseDescription":"Approved",
+    "transactionId":"NZ6FGYAYLYI6TLVWNSLM7WZLHE",
+    "transactionRef":"cfd068099a4280f1f09a965d9cc522f25ef4e06a95c9a9461d59fa5deed62180",
+    "transactionType":"charge","timestamp":"2019-01-15T00:42:36Z",
+    "tickBlock":"000e61f8204a2a372cac288f833a8e0949dd50d0074d5133432dce4e78d97913",
+    "authCode":"612797",
+    "entryMethod":"CHIP",
+    "paymentType":"VISA",
+    "maskedPan":"************0010",
+    "cardHolder":"Test/Card 01              ",
+    "partialAuth":false,
+    "altCurrency":false,
+    "currencyCode":"USD",
+    "requestedAmount":"20.55",
+    "authorizedAmount":"20.55",
+    "receiptSuggestions":{
+      "AID":"A0000000031010",
+      "ARQC":"E0A09074268A87F4",
+      "IAD":"06010A03A0B800",
+      "TVR":"0240008000",
+      "TSI":"E800",
+      "merchantName":"Test Merchant",
+      "applicationLabel":"VISA CREDIT",
+      "requestSignature":true,
+      "maskedPan":"************0010",
+      "authorizedAmount":"20.55",
+      "transactionType":"charge",
+      "entryMethod":"CHIP"
     }
   }
 
@@ -313,57 +324,30 @@ Sample Request and Response::
 
   HTTP/1.1 200 OK
   {
-
     // whether or not the transaction went through
     "approved":true,
 
     // narrative description of the response
-    "responseDescription": "Approved",
+    "responseDescription":"Approved",
 
     // authorization code
-    "authCode":"054321",
+    "authCode":"612797",
 
-    // indicates whether or not the authorized amount was less than the requested amount
-    "partialAuth":false,
-
-    // the final requested amount
-    // this could be more than the original request's amount if you prompted
-    // the user for a tip.
-    "requestedAmount":"12.67",
-
-    // amount authorized by the payment network
-    "authorizedAmount":"12.67",
-
-    // tip amount, could be different if you prompted the user for a tip
-    "tipAmount":"0.00",
-
-    // tax amount from the original request echoed back
-    "taxAmount":"0.00",
-
-    // currency for the authorization
-    "currencyCode":"USD",
-
-    // for conventional credit card transactions, the BlockChyp assigned batch id
-    "batchId": "UEOHSRX2MYI6RA2WSSDM7WZLHE",
-
-    // original transaction reference, echoed back
-    "transactionRef": "b944f032e997d944cdabb03cf1aa260ba3cde3d3b572b138eceb27bb41e54332",
-
-    // original test flag setting, echoed back
-    "test": false,
-
-    // BlockChyp assigned transaction Id.  Use this in any subsequent void requests.
-    "transactionId":"UEOHSRX2MYI6RA2LNSLM7WZLHE",
+    // BlockChyp assigned transaction id
+    "transactionId":"NZ6FGYAYLYI6TLVWNSLM7WZLHE",
 
     // transaction type, echoed back
     "transactionType":"charge",
 
     // timestamp of the transaction in UTC
-    "timestamp":"2018-12-07T21:25:37Z",
+    "timestamp":"2019-01-15T00:42:36Z",
 
     // hash of the latest tick block on the BlockChyp clockchain
     // this is essentially blockchain time
-    "tickBlock":"000a40ada947bd35886f19c8908cd84e521f713cc2637c0bf70b3b2ea63ffe7d",
+    "tickBlock":"000e61f8204a2a372cac288f833a8e0949dd50d0074d5133432dce4e78d97913",
+
+    // for conventional credit card transactions, the BlockChyp assigned batch id
+    "batchId": "UEOHSRX2MYI6RA2WSSDM7WZLHE",
 
     // could be CHIP, SWIPE, APPLEPAY, etc
     "entryMethod":"CHIP",
@@ -372,8 +356,33 @@ Sample Request and Response::
     "paymentType":"VISA",
 
     // masked account number with just the last four digits visible
-    "maskedPan":"************0119",
+    "maskedPan":"************0010",
 
+    // cardholder name
+    "cardHolder":"Test/Card 01              ",
+
+    // indicates whether or not the authorized amount was less than the requested amount
+    "partialAuth":false,
+
+    // original test flag setting, echoed back
+    "test": false,
+
+    // currency for the authorization
+    "currencyCode":"USD",
+
+    // the final requested amount
+    // this could be more than the original request's amount if you prompted
+    // the user for a tip.
+    "requestedAmount":"20.55",
+
+    // amount authorized by the payment network
+    "authorizedAmount":"20.55",
+
+    // tip amount, could be different if you prompted the user for a tip
+    "tipAmount":"0.00",
+
+    // tax amount from the original request echoed back
+    "taxAmount":"0.00",
 
     // reusable payment token, if requested by setting the enroll flag to "true"
     "token": "",
@@ -381,27 +390,24 @@ Sample Request and Response::
     // public key for BlockChyp gift cards
     "publicKey": "",
 
-
+    // data that developers should consider putting on their credit card receipts
     "receiptSuggestions":{
+
       // EMV Application Identifier - required on all EMV receipts
       "AID":"A0000000031010",
 
-      // Application Request Cryptogram - digital signature for an EMV transaction
-      "ARQC":"6218309BF7D48CC7",
-
-      // Issuer Application Data
-      "IAD":"06010A03A0A800",
-
-      // Terminal Verification Results
-      "TVR":"8000008000",
-
-      // Transaction Status Indicator
-      "TSI":"6800",
-
-      // if true, the system should print a signature line on the receipt
-      "requestSignature":true
+      "ARQC":"E0A09074268A87F4",
+      "IAD":"06010A03A0B800",
+      "TVR":"0240008000",
+      "TSI":"E800",
+      "merchantName":"Test Merchant",
+      "applicationLabel":"VISA CREDIT",
+      "requestSignature":true,
+      "maskedPan":"************0010",
+      "authorizedAmount":"20.55",
+      "transactionType":"charge",
+      "entryMethod":"CHIP"
     }
-
   }
 
 
@@ -474,96 +480,92 @@ Sample Request and Response::
   HTTP/1.1 200 OK
   {
 
-    // whether or not the transaction went through
-    "approved":true,
+  // whether or not the transaction went through
+  "approved":true,
 
-    // narrative description of the response
-    "responseDescription": "Approved",
+  // narrative description of the response
+  "responseDescription":"Approved",
 
-    // authorization code
-    "authCode":"054321",
+  // authorization code
+  "authCode":"612797",
 
-    // indicates whether or not the authorized amount was less than the requested amount
-    "partialAuth":false,
+  // BlockChyp assigned transaction id
+  "transactionId":"NZ6FGYAYLYI6TLVWNSLM7WZLHE",
 
-    // the final requested amount
-    // this could be more than the original request's amount if you prompted
-    // the user for a tip - which would almost never happen with a preauth
-    "requestedAmount":"12.67",
+  // transaction type, echoed back
+  "transactionType":"preauth",
 
-    // amount authorized by the payment network
-    "authorizedAmount":"12.67",
+  // timestamp of the transaction in UTC
+  "timestamp":"2019-01-15T00:42:36Z",
 
-    // tip amount, could be different if you prompted the user for a tip
-    "tipAmount":"0.00",
+  // hash of the latest tick block on the BlockChyp clockchain
+  // this is essentially blockchain time
+  "tickBlock":"000e61f8204a2a372cac288f833a8e0949dd50d0074d5133432dce4e78d97913",
 
-    // tax amount from the original request echoed back
-    "taxAmount":"0.00",
+  // for conventional credit card transactions, the BlockChyp assigned batch id
+  "batchId": "UEOHSRX2MYI6RA2WSSDM7WZLHE",
 
-    // currency for the authorization
-    "currencyCode":"USD",
+  // could be CHIP, SWIPE, APPLEPAY, etc
+  "entryMethod":"CHIP",
 
-    // for conventional credit card transactions, the BlockChyp assigned batch id
-    "batchId": "UEOHSRX2MYI6RA2WSSDM7WZLHE",
+  // could be VISA, MC, DISC, AMEX, or GIFT
+  "paymentType":"VISA",
 
-    // original transaction reference, echoed back
-    "transactionRef": "b944f032e997d944cdabb03cf1aa260ba3cde3d3b572b138eceb27bb41e54332",
+  // masked account number with just the last four digits visible
+  "maskedPan":"************0010",
 
-    // original test flag setting, echoed back
-    "test": false,
+  // cardholder name
+  "cardHolder":"Test/Card 01              ",
 
-    // BlockChyp assigned transaction Id.  Use this in any subsequent voids or capture requests.
-    // Required to capture the transaction later.
-    "transactionId":"UEOHSRX2MYI6RA2LNSLM7WZLHE",
+  // indicates whether or not the authorized amount was less than the requested amount
+  "partialAuth":false,
 
-    // transaction type, echoed back
-    "transactionType":"preauth",
+  // original test flag setting, echoed back
+  "test": false,
 
-    // timestamp of the transaction in UTC
-    "timestamp":"2018-12-07T21:25:37Z",
+  // currency for the authorization
+  "currencyCode":"USD",
 
-    // hash of the latest tick block on the BlockChyp clockchain
-    // this is essentially blockchain time
-    "tickBlock":"000a40ada947bd35886f19c8908cd84e521f713cc2637c0bf70b3b2ea63ffe7d",
+  // the final requested amount
+  // this could be more than the original request's amount if you prompted
+  // the user for a tip.
+  "requestedAmount":"20.55",
 
-    // could be CHIP, SWIPE, APPLEPAY, etc
-    "entryMethod":"CHIP",
+  // amount authorized by the payment network
+  "authorizedAmount":"20.55",
 
-    // could be VISA, MC, DISC, AMEX, or GIFT
-    "paymentType":"VISA",
+  // tip amount, could be different if you prompted the user for a tip
+  "tipAmount":"0.00",
 
-    // masked account number with just the last four digits visible
-    "maskedPan":"************0119",
+  // tax amount from the original request echoed back
+  "taxAmount":"0.00",
 
+  // reusable payment token, if requested by setting the enroll flag to "true"
+  "token": "",
 
-    // reusable payment token, if requested by setting the enroll flag to "true"
-    "token": "",
+  // public key for BlockChyp gift cards
+  "publicKey": "",
 
-    // public key for BlockChyp gift cards
-    "publicKey": "",
+  // data that developers should consider putting on their credit card receipts
+  "receiptSuggestions":{
 
+    // EMV Application Identifier - required on all EMV receipts
+    "AID":"A0000000031010",
 
-    "receiptSuggestions":{
-      // EMV Application Identifier - required on all EMV receipts
-      "AID":"A0000000031010",
-
-      // Application Request Cryptogram - digital signature for an EMV transaction
-      "ARQC":"6218309BF7D48CC7",
-
-      // Issuer Application Data
-      "IAD":"06010A03A0A800",
-
-      // Terminal Verification Results
-      "TVR":"8000008000",
-
-      // Transaction Status Indicator
-      "TSI":"6800",
-
-      // if true, the system should print a signature line on the receipt
-      "requestSignature":true
-    }
-
+    "ARQC":"E0A09074268A87F4",
+    "IAD":"06010A03A0B800",
+    "TVR":"0240008000",
+    "TSI":"E800",
+    "merchantName":"Test Merchant",
+    "applicationLabel":"VISA CREDIT",
+    "requestSignature":true,
+    "maskedPan":"************0010",
+    "authorizedAmount":"20.55",
+    "transactionType":"charge",
+    "entryMethod":"CHIP"
   }
+}
+
 
 
 Gift Activate (/api/gift-activate)
