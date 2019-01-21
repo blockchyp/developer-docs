@@ -70,6 +70,75 @@ as a fairly good example of what should go into a new SDK.
 If you're thinking of developing a new SDK, feel free to contact us at nerds@blockchyp.com.
 We'll talk through the trade offs with you and maybe pitch in ourselves.
 
+Standard Codes
+------------------------
+
+BlockChyp has a set of standard strings for things like Card Types and Entry Methods.
+
+If there were industry wide standards for this sort of thing, BlockChyp would
+gladly embrace them, but unfortunately that's not the way things work.  The lists
+below enumerate the keys you'll need to bake into your system as constants for BlockChyp.
+
+Card Types
+**********************
+
+This list enumerates the codes for card types and payment methods.
+
+:VISA: Visa
+
+:MC: MasterCard
+
+:AMEX: American Express
+
+:DINERS: Diners Club International
+
+:DISC: Discover
+
+:CUP: China  Union Pay
+
+:JCB: Japan Card Bureau
+
+:BC_GIFT: BlockChyp Blockchain Gift Card
+
+Entry Methods
+*********************
+
+This list enumerates the codes for entry methods.
+
+:CHIP: EMV chip contact
+
+:CONTACTLESS: EMV contactless
+
+:ECOM: E-Commerce
+
+:SWIPE: Magnetic Stripe Read
+
+:KEYED: Manually keyed
+
+:APPLEPAY: ApplePay
+
+:ANDROID: Android Pay
+
+:SAMSUNG:  Samsung Pay
+
+:WALLET:  Mobile Crypto Wallet
+
+Currency Codes
+*********************
+
+This list enumerates the currency codes defined by BlockChyp.
+
+:USD: United States Dollar
+
+:BTC: Bitcoin Main Fork
+
+:ETH: Ethereum
+
+:BCP: BlockChyp's internal cryptocurrency
+
+
+
+
 Receipt Requirements
 ------------------------
 
