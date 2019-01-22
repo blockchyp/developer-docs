@@ -11,6 +11,8 @@ pipeline {
   }
 
   options {
+    timeout(time: 1, unit: 'HOURS')
+    buildDiscarder(logRotator(numToKeepStr: '10'))
     withAWS(
       role: docsDeploymentRole(),
       roleSessionName: 'DocsDeployment',
