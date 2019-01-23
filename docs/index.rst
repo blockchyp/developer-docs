@@ -143,7 +143,7 @@ Receipt Requirements
 ------------------------
 
 BlockChyp API responses include information that most developers will use to
-created printed receipts.  Consider the following transaction response, shown
+create printed receipts.  Consider the following transaction response, shown
 here as JSON:
 
 **Sample Response**::
@@ -278,7 +278,7 @@ These can be changed or modified for your account via the BlockChyp dashboard.
 Roll Your Own SDK
 --------------------
 
-If there's not an SDK for your favorite language or platform, checkout out our
+If there's not an SDK for your favorite language or platform, check out our
 SDK developers guide for our advice about how to make your own.
 
 .. toctree::
@@ -297,7 +297,7 @@ the default test API provides abbreviated responses suitable for most purposes.
 But, these simplified responses may not satisfy all the card log requirements for real
 EMV tests.
 
-If you happen to have an Collis or UL EMV Test Tool and want to run real EMV
+If you happen to have a Collis or UL EMV Test Tool and want to run real EMV
 certification tests against BlockChyp, contact us at nerds@blockchyp.com.  We'll
 connect your test merchant account to a real EMV certification back end.
 
