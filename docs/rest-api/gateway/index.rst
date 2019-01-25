@@ -72,7 +72,7 @@ charge transaction using a previously enrolled recurring payment token.
     }
   }
 
-This is example shows the mechanics of a simple token based transaction using
+This example shows the mechanics of a simple token based transaction using
 the common VISA test card number of 4111 1111 1111 1111.
 
 **transactionRef** is where you would provide your own ID for a transaction.  It's
@@ -470,7 +470,7 @@ Preauth (/api/preauth)
 :Path:  /api/preauth
 
 Executes a preauthorization. For cloud enabled terminals, the terminalName
-method routes a transaction to a cloud based terminal.  Can also used for token based
+method routes a transaction to a cloud based terminal.  Can also be used for token based
 transactions.
 
 **terminalName** or **token** are required in the request, but not both.
@@ -630,7 +630,7 @@ Capture (/api/capture)
 :HTTP Method: POST
 :Path:  /api/capture
 
-This API captures a preauthorization.  Requires the transaction id from a previous
+This API captures a preauthorization.  Requires the transaction ID from a previous
 transaction.
 
 **Sample Request and Response**::

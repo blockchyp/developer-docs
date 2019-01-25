@@ -83,7 +83,7 @@ the list of trusted root certificates for your platform.
 
 .. warning::  Don't globally trust the certificate above.  It should be trusted only by the HTTP client instances that communicate with payment terminals.  Use your platform default certificate bundles for all other HTTP communication, including with the BlockChyp gateway.
 
-A Sample request
+A Sample Request
 ----------------
 
 Before we get too much further, let's take a look at a basic request.  The
