@@ -19,7 +19,7 @@ card present EMV payment system, you've been through hell.  These systems are -
 more often than not - overly complex, poorly documented, and when you run into
 trouble, straight answers from the payment companies are rare.
 
-Our goal is the make sure developers using an SDK have to do as little as
+Our goal is to make sure developers using an SDK have to do as little as
 possible.  Transaction routing and settlement logic should be totally
 encapsulated by the SDK.
 
@@ -35,7 +35,7 @@ Getting a Terminal
 It'll be difficult to write a payment terminal integration SDK without a payment
 terminal.  Sign up for a BlockChyp developer account `here <https://dashboard.dev.blockchyp.com>`_
 and order a BlockChyp Developer Kit.  The kit will include a real life payment
-terminal and a selection of test cards.  Don't forget to give us your T-Shirt size.
+terminal and a selection of test cards.
 
 .. note::  For the time being access to BlockChyp is by invitation only.  Contact us for an invite code.
 
@@ -134,7 +134,7 @@ because we think Base 32 is prettier than Base 64.
 Note that the Gateway does check all nonces against recent requests for uniqueness, so
 repeated nonces will cause requests to 403.
 
-The response to a **route** request includes meta data about the terminal that can
+The response to a **route** request includes metadata about the terminal that can
 then be used to execute direct API calls against the terminal.  The most useful piece
 of information is the IP Address.  This is the terminal's IP address on the local private network.
 We recommend that merchants statically configure terminal IP's, but a lot of them
@@ -157,7 +157,7 @@ caching route requests for at least an hour.
 
 **Running A Transaction**
 
-Now that you know where the terminal actually is, you can take some poor schmo's money.  This part's easy.
+Now that you know where the terminal actually is, you can take some poor schmo's money.  This part is easy.
 Just wrap the client's original request inside a Terminal Request as shown below.  Note
 that the terminal API is on ports 8000 and 8443.  We highly recommend using HTTPS
 on port 8443.
@@ -247,8 +247,6 @@ could be sent to the terminal or the gateway, depending on context.  If the char
 transaction includes a token, mag stripe, or primary account number; the transaction
 can (and must) be routed directly to the gateway.  But in most cases, the transaction only
 has a terminal name or IP address, and the transaction will need to be sent to a terminal.
-
-[Terminal Route Diagram]
 
 Gateway Credentials
 -------------------
@@ -342,7 +340,7 @@ Transaction Types
 The core BlockChyp transactions fall into a few different categories with similar data structures.
 
 **Authorization Transactions** are used to capture a payment method through the
-gateway or via a payment terminal.  These are the only transactions types that
+gateway or via a payment terminal.  These are the only transaction types that
 deal directly with payment methods.
 
 **Authorization Transactions**
@@ -923,11 +921,11 @@ of charge, preauth, enroll, and refund. For example...
 
 These methods should be valid for terminal based transactions only and developers
 are required to set a transactionRef value for these transactions.  Since the
-async methods return before a transaction response, the transaction ref can be used to
+async methods return before a transaction response, the transactionRef can be used to
 look up a response.
 
 SDK's should expose a method called **txStatus()** that can lookup a transaction by its
-id or transactionRef.
+ID or transactionRef.
 
 Developers can poll this method to determine the outcome of a transaction.  SDK's
 developers are also encouraged to make use of language specific concurrency features
