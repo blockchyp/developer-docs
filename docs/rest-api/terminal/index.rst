@@ -288,6 +288,17 @@ Sample Request and Response::
       // name of the terminal - optional
       "terminalName":"Desk Terminal",
 
+      // puts the terminal directly in keyed entry mode
+      // typically used for handling phone transactions (MOTO)
+      "manual": false,
+
+      // if you want the signature image returned with the response, specify
+      // the image format you want here
+      "sigFormat": "png|jpg|gif",
+
+      // optional max width images should be scaled to
+      "sigWidth": 600,
+
       // ISO three character currency code, optional, defaults to USD
       "currencyCode": "USD",
 
@@ -384,6 +395,9 @@ Sample Request and Response::
     // public key for BlockChyp gift cards
     "publicKey": "",
 
+    // sig file returned in hex if requested
+    "sigFile":"89504e470d0a1a0a0000000d49484452000...",
+
     // data that developers should consider putting on their credit card receipts
     "receiptSuggestions":{
 
@@ -442,6 +456,17 @@ Sample Request and Response::
 
       // name of the terminal - optional
       "terminalName":"Desk Terminal",
+
+      // puts the terminal directly in keyed entry mode
+      // typically used for handling phone transactions (MOTO)
+      "manual": false,
+
+      // if you want the signature image returned with the response, specify
+      // the image format you want here
+      "sigFormat": "png|jpg|gif",
+
+      // optional max width images should be scaled to
+      "sigWidth": 600,
 
       // ISO three character currency code, optional, defaults to USD
       "currencyCode": "USD",
@@ -540,6 +565,9 @@ Sample Request and Response::
   // public key for BlockChyp gift cards
   "publicKey": "",
 
+  // sig file returned in hex if requested
+  "sigFile":"89504e470d0a1a0a0000000d49484452000...",
+
   // data that developers should consider putting on their credit card receipts
   "receiptSuggestions":{
 
@@ -558,8 +586,155 @@ Sample Request and Response::
     "transactionType":"charge",
     "entryMethod":"CHIP"
   }
-}
+  }
 
+
+Refund (/api/refund)
+----------------------
+
+:HTTP Method: POST
+:Path:  /api/refund
+
+Executes a refund without a prior transaction context.  We call this a "free range"
+refund.
+
+The terminal prompts for a payment method,
+the user presents a method of payment and the API returns the authorization status
+and details about the payment method.
+
+.. note::  We strongly recommend deprecating transactions of this type.  Refunds with a transaction context are much more fraud resistant.
+
+.. note::  Sensitive information like track data or account numbers are never returned by any BlockChyp API.
+
+Sample Request and Response::
+
+  Request:
+
+  GET /api/refund HTTP/1.1
+  Host: 192.168.50.245
+
+  {
+    "apiKey":"3KLZKRWVOSL2I5ZTKR7ANM23VA",
+    "bearerToken":"LAAQPFNCQKDY5UGWDWTSUFFYWA",
+    "signingKey":"092019fcff1fef3f93fa25aa2680b760748fa97f7ae0721807d91b55dc52aadf",
+    "request": {
+
+      // application defined transaction identifier, up to 64 characters in length
+      // optional, but recommended since time out reversals won't work without it
+      "transactionRef": "b944f032e997d944cdabb03cf1aa260ba3cde3d3b572b138eceb27bb41e54332",
+
+      // flags this as a test transaction - no real money will change hands
+      "test": false,
+
+      // name of the terminal - optional
+      "terminalName":"Desk Terminal",
+
+      // puts the terminal directly in keyed entry mode
+      // typically used for handling phone transactions (MOTO)
+      "manual": false,
+
+      // if you want the signature image returned with the response, specify
+      // the image format you want here
+      "sigFormat": "png|jpg|gif",
+
+      // optional max width images should be scaled to
+      "sigWidth": 600,
+
+      // ISO three character currency code, optional, defaults to USD
+      "currencyCode": "USD",
+
+      // total amount to refund
+      "amount":"12.67",
+
+      // an optional description for the transaction
+      // for credit card transactions, this will appear on the statement
+      "description": "Comic Books"
+    }
+  }
+
+  Response:
+
+  HTTP/1.1 200 OK
+  {
+
+  // whether or not the transaction went through
+  "approved":true,
+
+  // narrative description of the response
+  "responseDescription":"Approved",
+
+  // authorization code
+  "authCode":"612797",
+
+  // BlockChyp assigned transaction id
+  "transactionId":"NZ6FGYAYLYI6TLVWNSLM7WZLHE",
+
+  // transaction type, echoed back
+  "transactionType":"refund",
+
+  // timestamp of the transaction in UTC
+  "timestamp":"2019-01-15T00:42:36Z",
+
+  // hash of the latest tick block on the BlockChyp clockchain
+  // this is essentially blockchain time
+  "tickBlock":"000e61f8204a2a372cac288f833a8e0949dd50d0074d5133432dce4e78d97913",
+
+  // for conventional credit card transactions, the BlockChyp assigned batch id
+  "batchId": "UEOHSRX2MYI6RA2WSSDM7WZLHE",
+
+  // could be CHIP, SWIPE, APPLEPAY, etc
+  "entryMethod":"CHIP",
+
+  // could be VISA, MC, DISC, AMEX, or GIFT
+  "paymentType":"VISA",
+
+  // masked account number with just the last four digits visible
+  "maskedPan":"************0010",
+
+  // cardholder name
+  "cardHolder":"Test/Card 01              ",
+
+  // indicates whether or not the authorized amount was less than the requested amount
+  "partialAuth":false,
+
+  // original test flag setting, echoed back
+  "test": false,
+
+  // currency for the authorization
+  "currencyCode":"USD",
+
+  // the final requested amount
+  // this could be more than the original request's amount if you prompted
+  // the user for a tip.
+  "requestedAmount":"20.55",
+
+  // amount authorized by the payment network
+  "authorizedAmount":"20.55",
+
+  // public key for BlockChyp gift cards
+  "publicKey": "",
+
+  // sig file returned in hex if requested
+  "sigFile":"89504e470d0a1a0a0000000d49484452000...",
+
+  // data that developers should consider putting on their credit card receipts
+  "receiptSuggestions":{
+      // EMV Application Identifier - required on all EMV receipts
+      "AID":"A0000000031010",
+
+      "ARQC":"E0A09074268A87F4",
+      "IAD":"06010A03A0B800",
+      "TVR":"0240008000",
+      "TSI":"E800",
+      "merchantName":"Test Merchant",
+      "applicationLabel":"VISA CREDIT",
+      "requestSignature":true,
+      "maskedPan":"************0010",
+      "authorizedAmount":"20.55",
+      "transactionType":"refund",
+      "entryMethod":"CHIP"
+    }
+  }
 
 
 Gift Activate (/api/gift-activate)
@@ -649,6 +824,25 @@ Sample Request and Response::
     "publicKey": "342a40ada947bd35886f19c8908cd84e521f713cc2637c0bf70b3b2ea63ffe7d",
 
   }
+
+Signature Capture
+---------------------
+
+BlockChyp defaults to capturing written signatures for EMV cards with signature
+CVM's and most magnetic stripe transactions.
+
+By default these images are uploaded to the gateway and stored for later
+retrieval in the dashboard.  This should be fine for most cases, but if you want
+signature images returned as part of the response, add
+`sigWidth` and `sigFormat` values to the request. These options, when used, will return the image in the
+response as hex in whatever file format is specified in the sigFormat parameter.
+
+As of this writing, jpeg, gif, and png formats are supported.  You can also scale the
+max width of the image with `sigWidth`.  This will scale the image to whatever max
+width you provide, preserving the original aspect ratio.
+
+We do recommend that unless developers have a specific reason why they need to archive
+signatures, that they just ignore all this and leave it to the dashboard.
 
 Time Out Reversals
 ------------------

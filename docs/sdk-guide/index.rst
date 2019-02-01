@@ -363,6 +363,9 @@ deal directly with payment methods.
     // Name assigned to the terminal at activation
     "terminalName": "Cashier #1",
 
+    // used to put the terminal straight into keyed entry mode for phone based transactions
+    "manual": false,
+
     // Reusable payment token obtained from a previous enroll transaction
     "token": "XXXXXXXX",
 
@@ -403,6 +406,14 @@ deal directly with payment methods.
     // Flags the transaction as a test transaction
     // Only valid with test api credentials
     "test": false,
+
+    // if a written signature is captured, convert it to the given format
+    // it will get returned in the response sigFile element as hexadecimal
+    "sigFormat": "png|jpg|gif"
+
+    // if the user wants the signature image scaled to a max width, provide
+    // the width here in pixels
+    "sigWidth": 600,
 
     // If the merchant has set foreign exchange or cryptocurrency
     // prices, they can be passed in here.  Otherwise cryptocurrency
@@ -501,6 +512,9 @@ All authorization request have the same response format as shown below:
 
     // ISO 8601 formatted timestamp
     "timestamp": "2008-09-15T15:53:00Z",
+
+    // signature image, if requested, in hex
+    "sigFile": "89504e470d0a1a0a0000000d4948445200...",
 
     // A list of EMV tags and fields we recommend developers put on their receipts.
     "receiptSuggestions:" {
@@ -906,30 +920,19 @@ transaction volume by card brand.
     }
   }
 
-Asynchronous Transactions
--------------------------
+Handling Signature Images
+-----------------------------
 
-By default, BlockChyp transactions are synchronous with configurable timeouts.
-For some scenarios, like pay-at-the-table, this may not be the best option and
-authorizations will need to be asynchronous.  SDK's should expose async versions
-of charge, preauth, enroll, and refund. For example...
+BlockChyp defaults to capturing written signatures for EMV cards with signature
+CVM's and most magnetic stripe transactions.
 
-- asyncCharge()
-- asyncPreauth()
-- asyncRefund()
-- asyncEnroll()
+By default these images are uploaded to the gateway and stored for later
+retrieval in the dashboard.  This should be fine for most cases, but some developers
+will want their signature images returned in the response.  The standard API supports
+`sigWidth` and `sigFormat` options, that, when used, will return the image in the
+response as hex in whatever file format is specified in the sigFormat parameter.
 
-These methods should be valid for terminal based transactions only and developers
-are required to set a transactionRef value for these transactions.  Since the
-async methods return before a transaction response, the transactionRef can be used to
-look up a response.
-
-SDK's should expose a method called **txStatus()** that can lookup a transaction by its
-ID or transactionRef.
-
-Developers can poll this method to determine the outcome of a transaction.  SDK's
-developers are also encouraged to make use of language specific concurrency features
-to notify clients applications when a transaction finally completes.  For example,
-a Javascript SDK could take advantage of promises or callbacks.  The async methods
-in our Go SDK accept channels as parameters and these channels are notified when
-transactions complete.
+We recommend however, that SDK developers add a sigFile option to their authorization
+request that will permit developers to write the image to a local file.  Implement
+this functionality by copying the hex returned in sigFormat to a file and removing the
+hex from the authorization response before returning it.
