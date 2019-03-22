@@ -857,3 +857,216 @@ the Gateway API's Reverse Endpoint.  Note that this requires the use of the **tr
 field.
 
 Consult the Payment Gateway REST API Reference for more detail.
+
+Display Transaction Line Items (/api/txdisplay)
+----------------------
+
+:HTTP Method: POST
+:Path:  /api/txdisplay
+
+Displays a new transaction on a terminal, including item group
+subtotals, item level discounts, subtotal, tax, and total.
+
+Any existing transaction display will be cleared.
+
+Sample Request and Response::
+
+  Request:
+
+  POST /api/txdisplay HTTP/1.1
+  Host: terminal.local
+
+  {
+    "apiKey":"3KLZKRWVOSL2I5ZTKR7ANM23VA",
+    "bearerToken":"LAAQPFNCQKDY5UGWDWTSUFFYWA",
+    "signingKey":"092019fcff1fef3f93fa25aa2680b760748fa97f7ae0721807d91b55dc52aadf",
+    "request": {
+      // terminalName is used to identify the terminal which should
+      // display the transaction.
+      "terminalName": "Example Terminal",
+
+      // transaction is the transaction to display.
+      "transaction": {
+        // subtotal is the entire transaction subtotal.
+        "subtotal": "1.00",
+
+        // tax is the entire transaction tax.
+        "tax": "0.23",
+
+        // total is the entire transaction total.
+        "total": "1.23",
+
+        // items contain a breakdown of items in the transaction.
+        "items": [
+          {
+            // description is the name of the item as it will be
+            // displayed.
+            "description": "Electronic Widget",
+
+            // price is the unit price of a single item.
+            "price": "0.25",
+
+            // quantity is the count of this item in the transaction.
+            "quantity": 4,
+          },
+          {
+            "description": "Free Electronic Widget Addon",
+            "price": "0.10",
+            "quantity": 1,
+
+            // discounts are optional item-level discounts to display
+            // along side the items.
+            "discounts": [
+              {
+                // description is the name of the discount.
+                "description": "Half Off",
+
+                // amount is the amount of the discount.
+                "amount": "-0.05"
+              },
+
+              // Multiple discounts can be displayed per-item.
+              {
+                "description": "Half Off",
+                "amount": "-0.05"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+
+  Response:
+
+  HTTP/1.1 200 OK
+  {
+    // success indicates whether or not the request completed.
+    "success": true,
+
+    // error describes what caused the request to fail, if it failed.
+    "error": "",
+  }
+
+Add Items To Transaction Display (/api/txdisplay)
+----------------------
+
+:HTTP Method: PUT
+:Path:  /api/txdisplay
+
+Updates an existing transaction display on a terminal. If no transaction
+is currenclty being displayed, it will initiate a new transaction
+display.
+
+If an item already exists in the transaction, the new item will be
+combined with the old item, and the item group subtotal will be updated
+accordingly.
+
+Discounts will never combine, however discounts for an item which is
+already in the transaction will be added to the item group.
+
+Subtotal, tax, and total will be overwritten by each subsequent request.
+POS systems should calculate these values and pass them in with each
+request.
+
+Sample Request and Response::
+
+  Request:
+
+  PUT /api/txdisplay HTTP/1.1
+  Host: terminal.local
+
+  {
+    "apiKey":"3KLZKRWVOSL2I5ZTKR7ANM23VA",
+    "bearerToken":"LAAQPFNCQKDY5UGWDWTSUFFYWA",
+    "signingKey":"092019fcff1fef3f93fa25aa2680b760748fa97f7ae0721807d91b55dc52aadf",
+    "request": {
+      // terminalName is used to identify the terminal which should
+      // display the transaction.
+      "terminalName": "Example Terminal",
+
+      // transaction is the transaction to display.
+      "transaction": {
+        // subtotal is the entire transaction subtotal. It is a
+        // point-in-time value, not a commulative value.
+        "subtotal": "12.00",
+
+        // tax is the entire transaction tax. It is a point-in-time
+        // value, not a cumulative value.
+        "tax": "0.50",
+
+        // total is the entire transaction total. It is a point-in-time
+        // value, not a cumulative value.
+        "total": "12.50",
+
+        // items will be appended to the transaction.
+        "items": [
+          {
+            // description is the name of the item as it will be
+            // displayed. Since this description is the same as the item
+            // added in the the POST example, it will be combined and
+            // the new quantity will become 8.
+            "description": "Electronic Widget",
+
+            // price is the unit price of a single item.
+            "price": "0.25",
+
+            // quantity is the count of this item in the transaction.
+            "quantity": 4,
+          },
+
+          // Since this is a new item, it will be added to the
+          //transaction as a new line.
+          {
+            "description": "A New Item",
+            "price": "10.00",
+            "quantity": 1,
+          }
+        ]
+      }
+    }
+  }
+
+  Response:
+
+  HTTP/1.1 200 OK
+  {
+    // success indicates whether or not the request completed.
+    "success": true,
+
+    // error describes what caused the request to fail, if it failed.
+    "error": "",
+  }
+
+Reset Transaction Display (/api/txdisplay)
+----------------------
+
+:HTTP Method: DELETE
+:Path:  /api/txdisplay
+
+Clears any existing transaction display on a terminal, and returns the
+terminal to the idle screen.
+
+Sample Request and Response::
+
+  Request:
+
+  DELETE /api/txdisplay HTTP/1.1
+  Host: terminal.local
+
+  {
+    "apiKey":"3KLZKRWVOSL2I5ZTKR7ANM23VA",
+    "bearerToken":"LAAQPFNCQKDY5UGWDWTSUFFYWA",
+    "signingKey":"092019fcff1fef3f93fa25aa2680b760748fa97f7ae0721807d91b55dc52aadf",
+  }
+
+  Response:
+
+  HTTP/1.1 200 OK
+  {
+    // success indicates whether or not the request completed.
+    "success": true,
+
+    // error describes what caused the request to fail, if it failed.
+    "error": "",
+  }
