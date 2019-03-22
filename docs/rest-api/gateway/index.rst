@@ -3,7 +3,7 @@
 Payment Gateway REST API Reference
 ==================================
 
-BlockChyp consists of two REST API's: the small API that runs on every BlockChyp
+BlockChyp consists of two REST APIs: the small API that runs on every BlockChyp
 payment terminal and the Gateway API.
 
 Like everything in BlockChyp, the Gateway was designed to be simple.  With a few exceptions, the concepts should be

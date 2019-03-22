@@ -16,14 +16,14 @@ To get started with BlockChyp, sign up for a developer account on the
 BlockChyp Developer Kit.  The kit will include a fully functioning payment terminal,
 along with chip, mag stripe, and gift card test cards.
 
-Next, examine the list of SDK's and Clients and follow the instructions for your
+Next, examine the list of SDKs and Clients and follow the instructions for your
 technology ecosystem.
 
 
 SDKs and Clients
 -----------------
 
-All supported BlockChyp SDK's are open source and hosted on Github.
+All supported BlockChyp SDKs are open source and hosted on Github.
 
 - `Go SDK <https://github.com/blockchyp/blockchyp-go>`_
 - `Python SDK <https://github.com/blockchyp/blockchyp-python>`_
@@ -39,9 +39,9 @@ plenty of other options.
 Use The Rest API's
 *********************
 
-The SDK's aren't required. We just provide them to make things a little bit simpler
+The SDKs aren't required. We just provide them to make things a little bit simpler
 and faster for developers.  The BlockChyp Gateway and all BlockChyp terminals
-run simple REST API's you can integrate with directly.  Checkout the `Terminal REST API Reference <rest-api/terminal/index.html>`_
+run simple REST APIs you can integrate with directly.  Checkout the `Terminal REST API Reference <rest-api/terminal/index.html>`_
 and the `Payment Gateway REST API Reference <rest-api/gateway/index.html>`_ for more information.
 
 Use The Command Line
@@ -198,13 +198,13 @@ all card brand receipt requirements and recommendations.
 - **ARQC**
 - **TC**
 
-REST API's
+REST APIs
 ----------
 
-We recommend developers use SDK's instead of the REST API's directly as it will
-make implementation go faster.  Our SDK's deal with HMAC authentication and locating
+We recommend developers use SDKs instead of the REST APIs directly as it will
+make implementation go faster.  Our SDKs deal with HMAC authentication and locating
 terminals for you.  But if you prefer to do a direct REST API integration, we won't stop you.
-The REST API's aren't complicated.  Check out the API docs below:
+The REST APIs aren't complicated.  Check out the API docs below:
 
 .. toctree::
    :maxdepth: 2
