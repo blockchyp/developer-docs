@@ -859,7 +859,7 @@ field.
 Consult the Payment Gateway REST API Reference for more detail.
 
 Display Transaction Line Items (/api/txdisplay)
-----------------------
+--------------------------------------------------
 
 :HTTP Method: POST
 :Path:  /api/txdisplay
@@ -949,7 +949,7 @@ Sample Request and Response::
   }
 
 Add Items To Transaction Display (/api/txdisplay)
-----------------------
+----------------------------------------------------
 
 :HTTP Method: PUT
 :Path:  /api/txdisplay
@@ -1039,7 +1039,7 @@ Sample Request and Response::
   }
 
 Reset Transaction Display (/api/txdisplay)
-----------------------
+---------------------------------------------
 
 :HTTP Method: DELETE
 :Path:  /api/txdisplay
@@ -1069,4 +1069,150 @@ Sample Request and Response::
 
     // error describes what caused the request to fail, if it failed.
     "error": "",
+  }
+
+
+Message Display (/api/message)
+---------------------------------------------
+
+:HTTP Method: POST
+:Path:  /api/message
+
+Displays a free form text message on the terminal.  The message will time out
+after 30 seconds.
+
+Sample Request and Response::
+
+  Request:
+
+  POST /api/message HTTP/1.1
+  Host: terminal.local
+
+  {
+    "apiKey":"3KLZKRWVOSL2I5ZTKR7ANM23VA",
+    "bearerToken":"LAAQPFNCQKDY5UGWDWTSUFFYWA",
+    "signingKey":"092019fcff1fef3f93fa25aa2680b760748fa97f7ae0721807d91b55dc52aadf",
+    "request": {
+      // terminalName is used to identify the terminal which should
+      // display the message
+      "terminalName": "Example Terminal",
+
+      // the message to be displayed on the terminal
+      "message": "Sample terminal message."
+
+    }
+  }
+
+  Response:
+
+  HTTP/1.1 200 OK
+  {
+    // success indicates whether or not the request completed.
+    "success": true,
+
+    // error describes what caused the request to fail, if it failed.
+    "error": "",
+  }
+
+Boolean Prompt (/api/boolean-prompt)
+---------------------------------------------
+
+:HTTP Method: POST
+:Path:  /api/boolean-prompt
+
+Asks the user a yes or no question.
+
+Sample Request and Response::
+
+  Request:
+
+  POST /api/boolean-prompt HTTP/1.1
+  Host: terminal.local
+
+  {
+    "apiKey":"3KLZKRWVOSL2I5ZTKR7ANM23VA",
+    "bearerToken":"LAAQPFNCQKDY5UGWDWTSUFFYWA",
+    "signingKey":"092019fcff1fef3f93fa25aa2680b760748fa97f7ae0721807d91b55dc52aadf",
+    "request": {
+      // terminalName is used to identify the terminal which should
+      // display the prompt
+      "terminalName": "Example Terminal",
+
+      // the message to be displayed on the terminal
+      "prompt": "Isn't BlockChyp easy to integrate with?",
+
+      // optional, defaults to 'Yes'
+      "yesCaption": "Yes"
+
+      // optional, defaults to 'No'
+      "noCaption": "No"
+
+    }
+  }
+
+  Response:
+
+  HTTP/1.1 200 OK
+  {
+    // success indicates whether or not the request completed.
+    "success": true,
+
+    // error describes what caused the request to fail, if it failed.
+    "error": "",
+
+    // the user's response - true or false
+    "response": true
+  }
+
+Text Prompt (/api/text-prompt)
+---------------------------------------------
+
+:HTTP Method: POST
+:Path:  /api/text-prompt
+
+Captures text input from the user.  Due to PCI restrictions free form prompt
+text is not supported so you must choose from a list of prompt types.  The reason
+PCI restricts free form prompts is that a malicious application could use the
+prompt to ask for card numbers or PIN's.  We know *you* wouldn't do that, but
+someone might.
+
+We currently support 'email', 'phone', 'customer-number', and 'rewards-number' prompts.
+
+Ping us at support@blockchyp.com if you need us to add one to the list.
+
+Sample Request and Response::
+
+  Request:
+
+  POST /api/text-prompt HTTP/1.1
+  Host: terminal.local
+
+  {
+    "apiKey":"3KLZKRWVOSL2I5ZTKR7ANM23VA",
+    "bearerToken":"LAAQPFNCQKDY5UGWDWTSUFFYWA",
+    "signingKey":"092019fcff1fef3f93fa25aa2680b760748fa97f7ae0721807d91b55dc52aadf",
+    "request": {
+      // terminalName is used to identify the terminal which should
+      // display the prompt
+      "terminalName": "Example Terminal",
+
+      // the type of prompt to use
+      // could be 'email', 'phone', 'customer-number' or 'rewards-number'
+      "promptType": "email",
+
+    }
+  }
+
+  Response:
+
+  HTTP/1.1 200 OK
+  {
+    // success indicates whether or not the request completed.
+    "success": true,
+
+    // error describes what caused the request to fail, if it failed.
+    "error": "",
+
+    // the user's response
+    "response": "support@blockchyp.com"
   }

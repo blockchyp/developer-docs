@@ -936,3 +936,67 @@ We recommend however, that SDK developers add a sigFile option to their authoriz
 request that will permit developers to write the image to a local file.  Implement
 this functionality by copying the hex returned in sigFormat to a file and removing the
 hex from the authorization response before returning it.
+
+Cloud Relay Support
+---------------------------
+
+BlockChyp terminals can be reached via the local REST API or via Cloud Relay.
+Cloud relay is intended for situations where the POS or application is not on
+the same subnet as the terminal.   Cloud based applications would want to use
+cloud relay exclusively.
+
+As an SDK developer, you should make the difference between the two totally
+transparent to your application developers.  It should be possible for an application
+integrated with your SDK to send the exact same API call for cloud relay and
+locally configured terminals.
+
+The Terminal Route response will return a flag indicating whether or not
+cloud relay has been enabled for the terminal.  Use this flag to route transactions
+to the Gateway if checked.
+
+The payment Gateway API's supporting cloud relay support the exact same request
+and response JSON as direct terminal request, with one notable exception.
+Gateway API requests are not wrapped in an outer data structure with API credentials.
+
+Instead, gateway requests are authenticated directly in the same way as all other gateway
+transactions.  Check out the Gateway API docs for more detail.
+
+
+Customer Interaction API's
+-----------------------------
+
+Not all terminal functions are related to payment processing.  Some are designed
+to enable the point of sale system to interact with the user.  The most common
+example would be line item display, but we also support messages, yes/no prompts,
+and text prompts for things like email addresses, phone numbers, and rewards numbers.
+
+Note that even though these API's don't involve payments, the terminal still enforces
+terminal security and the usual API credentials are still required to prevent
+pranksters from displaying silly messages on the terminals.
+
+Route Cache
+------------------
+We recommend that SDK's provide a way of caching terminal route lookups in order
+to prevent hitting the terminal route API over and over for IP addresses that rarely change.
+
+You should design your SDK to cache routes in memory at a minimum, but even with
+in memory caching you cannot be certain that your developers will use your SDK
+in a way that preserves the cache.
+
+For this reason we recommend you use an offline cache as well.  This cache should
+essentially be a JSON encoded map of routes keyed by terminal name and api key.
+Make sure you store this is a temp file in the typical temp file location for
+your target operating system.  Otherwise you might introduce weird permissions
+issues.
+
+We recommend you encrypt the transient credential values for each route to prevent
+tampering or disclosure.  In our reference Go SDK, we do this be deriving a unique
+encryption key based on a static constant (in the code) hashed with the signing key
+for the root credentials (which are never stored on disc.)
+
+This ensures that only the session or system that encrypted the route can decrypt it.
+
+You may elect to provide a cache timeout.  We recommend nothing shorter than 1 hour.
+In the event of a cache timeout, consider waiting to see if your terminal route
+request succeeds before treating it as a cache miss.  It's better to use a stale
+route than no route at all.
