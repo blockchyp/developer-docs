@@ -29,7 +29,7 @@ pipeline {
     stage('Build Docs') {
       steps {
         sh 'cd docs && make html'
-        sh "aws s3 sync --delete ${workspace}/docs/_build/html/ s3://blockchyp-prod-docs/"
+        sh "aws s3 sync --delete ${workspace}/docs/_build/html/ s3://blockchyp-prod-docs/ --exclude='sdks/*'"
       }
     }
   }
