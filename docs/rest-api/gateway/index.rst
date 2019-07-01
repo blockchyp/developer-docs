@@ -138,12 +138,12 @@ Authorization
 
 ``Authorization: Dual PCZFLPXD2PWI7B7VVFHD4VJ4KE:NNSNQ6ASHUHSCMEVOD666VZZLA:b695b1af23f9d..``
 
-``Authorization: Dual <API Key>:<Bearer Token>:<HMAC Signature>``
+``Authorization: Dual <Bearer Token>:<API Key>:<HMAC Signature>``
 
 The authorization header is assembled by starting with the keyword "Dual" which
 references BlockChyp's Dual authentication scheme.
 
-Add a space and then the API Key followed by the Bearer Token, separated by a colon.
+Add a space and then the Bearer Token followed by the API Key, separated by a colon.
 
 To compute the HMAC Signature, first concatenate the API Key, Bearer Token, Timestamp
 and Nonce with no separator.  (This is a bit simpler than other common HMAC
