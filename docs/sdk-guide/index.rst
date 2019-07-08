@@ -334,6 +334,67 @@ the following root certificate:
 
 .. warning::  Don't globally trust the certificate above.  It should be trusted only by the HTTP client instances that communicate with payment terminals.  Use your platform default certificate bundles for all other HTTP communication, including with the BlockChyp gateway.
 
+Feature Checklist
+------------------
+
+The table below shows a quick reference to all BlockChyp features an SDK must support
+to be considered feature complete, along with references to whether the features
+must be supported in local and cloud relay mode.  Please provide an integration
+test for each feature.
+
+*Features planned for the near future are given in italics.*
+
++-------------------------------+---------------------------------+----------------------------+----------------------------+
+|Feature                        | API                             | Local                      | Gateway                    |
++===============================+=================================+============================+============================+
+| Heartbeat                     | /api/heartbeat                  | N/A                        | Required                   |
++-------------------------------+---------------------------------+----------------------------+----------------------------+
+| Ping                          | /api/test                       | Required                   | N/A                        |
++-------------------------------+---------------------------------+----------------------------+----------------------------+
+| Enroll                        | /api/enroll                     | Required                   | Required                   |
++-------------------------------+---------------------------------+----------------------------+----------------------------+
+| Charge                        | /api/charge                     | Required                   | Required                   |
++-------------------------------+---------------------------------+----------------------------+----------------------------+
+| Preauth                       | /api/preauth                    | Required                   | Required                   |
++-------------------------------+---------------------------------+----------------------------+----------------------------+
+| Refund                        | /api/refund                     | Required                   | Required                   |
++-------------------------------+---------------------------------+----------------------------+----------------------------+
+| Reverse                       | /api/reverse                    | N/A                        | Required                   |
++-------------------------------+---------------------------------+----------------------------+----------------------------+
+| Void                          | /api/void                       | N/A                        | Required                   |
++-------------------------------+---------------------------------+----------------------------+----------------------------+
+| Capture                       | /api/capture                    | N/A                        | Required                   |
++-------------------------------+---------------------------------+----------------------------+----------------------------+
+| Close Batch                   | /api/close-batch                | N/A                        | Required                   |
++-------------------------------+---------------------------------+----------------------------+----------------------------+
+| Message                       | /api/message                    | Required                   | Required                   |
++-------------------------------+---------------------------------+----------------------------+----------------------------+
+| Text Prompt                   | /api/text-prompt                | Required                   | Required                   |
++-------------------------------+---------------------------------+----------------------------+----------------------------+
+| Boolean Prompt                | /api/boolean-prompt             | Required                   | Required                   |
++-------------------------------+---------------------------------+----------------------------+----------------------------+
+| New Transaction Display       | GW: /api/terminal-txdisplay     | Required                   | Required                   |
+|                               |                                 |                            |                            |
+|                               | Local: /api/txdisplay           |                            |                            |
++-------------------------------+---------------------------------+----------------------------+----------------------------+
+| Update Transaction Display    | GW: /api/terminal-txdisplay     | Required                   | Required                   |
+|                               |                                 |                            |                            |
+|                               | Local: /api/txdisplay           |                            |                            |
++-------------------------------+---------------------------------+----------------------------+----------------------------+
+| Clear                         | GW: /api/terminal-clear         | Required                   | Required                   |
+|                               | Local: /api/clear               |                            |                            |
++-------------------------------+---------------------------------+----------------------------+----------------------------+
+| *Transaction Status*          | */api/tx*                       | *N/A*                      | *Required*                 |
++-------------------------------+---------------------------------+----------------------------+----------------------------+
+| *Donation Prompt*             | */api/donation*                 | *Required*                 | *Required*                 |
++-------------------------------+---------------------------------+----------------------------+----------------------------+
+| *Terms and Conditions Prompt* | */api/tc-prompt*                | *Required*                 | *Required*                 |
++-------------------------------+---------------------------------+----------------------------+----------------------------+
+| *Terminal Status*             | *GW: /api/terminal-status*      | *Required*                 | *Required*                 |
+|                               |                                 |                            |                            |
+|                               | *Local: /api/status*            |                            |                            |
++-------------------------------+---------------------------------+----------------------------+----------------------------+
+
 Transaction Types
 -----------------
 
