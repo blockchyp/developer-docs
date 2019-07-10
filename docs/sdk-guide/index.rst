@@ -1046,12 +1046,12 @@ in a way that preserves the cache.
 
 For this reason we recommend you use an offline cache as well.  This cache should
 essentially be a JSON encoded map of routes keyed by terminal name and api key.
-Make sure you store this is a temp file in the typical temp file location for
+Make sure you store this as a temp file in the typical temp file location for
 your target operating system.  Otherwise you might introduce weird permissions
 issues.
 
 We recommend you encrypt the transient credential values for each route to prevent
-tampering or disclosure.  In our reference Go SDK, we do this be deriving a unique
+tampering or disclosure.  In our reference Go SDK, we do this by deriving a unique
 encryption key based on a static constant (in the code) hashed with the signing key
 for the root credentials (which are never stored on disc.)
 
