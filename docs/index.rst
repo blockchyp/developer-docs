@@ -275,6 +275,22 @@ These can be changed or modified for your account via the BlockChyp dashboard.
 | timeout            | 5555555555554444  |  68.00          | Gateway hangs for 30 seconds. |
 +--------------------+-------------------+-----------------+-------------------------------+
 
+Store and Forward Testing
+--------------------------
+
+BlockChyp terminals include the ability to store transactions for later authorization
+in the event of a network outage.  To test this feature, ensure your test merchant
+account has a non-zero floor limit set on the merchant profile.  You can then test store
+and forward by unplugging the terminal from the network in the middle of a transaction or
+you can simply use a special trigger amount with all sevens (e.g. 0.77, 7.77, 77.77) and
+the terminal will simulate a network outage and process the transaction as a store and
+forward transaction.
+
+Terminals attempt to forward offline transactions every two minutes until they
+are successfully processed.  To test a declined store and forward transaction, try
+running an amount with all sevens below the floor limit with the decline test card.
+
+
 Roll Your Own SDK
 --------------------
 
