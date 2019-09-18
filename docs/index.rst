@@ -25,8 +25,9 @@ SDKs and Clients
 
 All supported BlockChyp SDKs are open source and hosted on Github.
 
+
+- `.NET / C# SDK <https://github.com/blockchyp/blockchyp-csharp>`_
 - `Go SDK <https://github.com/blockchyp/blockchyp-go>`_
-- `Python SDK <https://github.com/blockchyp/blockchyp-python>`_
 - `Javascript SDK <https://github.com/blockchyp/blockchyp-js>`_
 - `Java SDK <https://github.com/blockchyp/blockchyp-java>`_
 
