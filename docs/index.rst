@@ -231,6 +231,8 @@ In order to make the customer experience seamless, a white listed response will
 return to the POS while leaving the terminal screen unchanged.  We recommend
 that developers call the BlockChyp message API to display an approved or declined
 response on the terminal screen after the white listed card has been processed.
+This will make the transaction appear to the consumer to have been completed
+entirely on the terminal.
 
 Receipt Requirements
 ------------------------
