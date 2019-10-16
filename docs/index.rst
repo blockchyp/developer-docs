@@ -137,8 +137,100 @@ This list enumerates the currency codes defined by BlockChyp.
 
 :BCP: BlockChyp's internal cryptocurrency
 
+Gift Cards
+------------
 
+The BlockChyp gift card system is quite a bit different from conventional gift cards.
+Conventional gift cards, just like credit cards, typically rely on 16 digit
+primary account numbers.  These numbers are relatively easy to guess via brute force,
+which makes them vulnerable to a host of security problems.  But unlike conventional
+credit card numbers, gift cards aren't protected by PCI and often implemented by
+white listing gift card BIN ranges.  They're usually the most insecure part of any
+payment system.
 
+BlockChyp gift cards do have 16 digit numbers printed on them for familiarity and
+convenience, but these numbers are for identification purposes only.  Under the hood
+every BlockChyp gift card has a unique set of P256 elliptic curve keys.
+
+The elliptic curve keys are used to open a new blockchain when new gift cards are
+activated and as the card is redeemed and recharged, the keys are used to sign
+transactions.  This means that shared secrets (i.e. primary account numbers) are
+never transmitted over the network with a BlockChyp gift card transaction.  The
+transaction could be intercepted or sent in the clear and not compromise the gift card.
+
+We've gone through a lot of trouble to insulate developers from dealing with blockchain
+details.  BlockChyp gift card transactions are like any other transaction with the exception
+of how gift cards are identified.  Authorization requests for gift card transactions
+return the elliptic curve public key in the publicKey field.  If you need to keep track of gift
+cards in your SaaS or point-of-sale systems, use the public key.  A remaining balance is
+also returned with every gift card authorization.
+
+Although you don't have to understand blockchain technology to work with BlockChyp
+gift cards, the merchant and developer dashboards to expose methods of browsing and
+viewing the raw blockchain for the curious.
+
+Third Party Gift Cards
+*************************
+
+For merchants with existing gift card liability, these gift cards can be easily
+imported into BlockChyp.  Simply provide your liability report to your BlockChyp
+representative.  BlockChyp will review the liability data and import the gift cards
+into your BlockChyp account
+
+Third party gift cards are redeemed just like BlockChyp gift cards.  Simply swipe
+them on the terminal at the present card prompt.
+
+BIN Range White Listing
+--------------------------
+
+In the event that developers need to process certain card types outside of BlockChyp,
+it is possible to white list BIN ranges and have the raw card data returned.  Configuring
+a merchant account for white listing does require a security review by BlockChyp.
+If you need to white list a BIN range, contact BlockChyp support to complete the setup.
+
+Once the configuration is complete, white listed card responses will look this like this...
+
+White List Sample Response::
+
+  {
+    "responseDescription": "WHITELISTED",
+    "transactionId": "",
+    "transactionRef": "26476425504",
+    "transactionType": "charge",
+    "timestamp": "",
+    "tickBlock": "",
+    "test": false,
+    "approved": false,
+    "authCode": "",
+    "sigFile": "",
+    "receiptSuggestions": {
+      "authorizedAmount": "0",
+      "transactionType": "charge",
+      "cashBackAmount": "0"
+    },
+    "partialAuth": false,
+    "altCurrency": false,
+    "fsaAuth": false,
+    "currencyCode": "",
+    "requestedAmount": "0",
+    "authorizedAmount": "0",
+    "tipAmount": "0",
+    "taxAmount": "0",
+    "requestedCashBackAmount": "0",
+    "authorizedCashBackAmount": "0",
+    "whiteListedCard": {
+      "bin": "778273",
+      "track1": "B7782730094745057^SQUARE GIFT CARD^99127069345",
+      "track2": "7782730094745057=99127069345",
+      "pan": "7782730094745057"
+    },
+    "storeAndForward": false
+  }
+
+In order to make the customer experience seamless, a white listed response will
+return to the POS while leaving the terminal screen unchanged.  We recommend
+that developers call the BlockChyp message API to display an approved or declined
+response on the terminal screen after the white listed card has been processed.
 
 Receipt Requirements
 ------------------------
