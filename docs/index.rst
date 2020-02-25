@@ -23,27 +23,25 @@ technology ecosystem.
 SDKs and Clients
 -----------------
 
-All supported BlockChyp SDKs are open source and hosted on Github.
+All supported BlockChyp SDKs are open source and hosted on Github.  Binaries
+are distributed via all the usual package management systems for each
+platform.  (Maven for Java, Rubygems for Ruby, etc.)
 
 
 - `.NET / C# SDK <https://github.com/blockchyp/blockchyp-csharp>`_
 - `Go SDK <https://github.com/blockchyp/blockchyp-go>`_
 - `Javascript SDK <https://github.com/blockchyp/blockchyp-js>`_
 - `Java SDK <https://github.com/blockchyp/blockchyp-java>`_
+- `PHP SDK <https://github.com/blockchyp/blockchyp-php>`_
+- `Python SDK <https://github.com/blockchyp/blockchyp-python>`_
+- `Ruby SDK <https://github.com/blockchyp/blockchyp-ruby>`_
+- `iOS SDK <https://github.com/blockchyp/blockchyp-ios>`_
 
 What If My Platform Isn't Listed?
 ----------------------------------
 
 If we don't have a client or SDK for your language or platform listed, you have
 plenty of other options.
-
-Use The Rest API's
-*********************
-
-The SDKs aren't required. We just provide them to make things a little bit simpler
-and faster for developers.  The BlockChyp Gateway and all BlockChyp terminals
-run simple REST APIs you can integrate with directly.  Checkout the `Terminal REST API Reference <rest-api/terminal/index.html>`_
-and the `Payment Gateway REST API Reference <rest-api/gateway/index.html>`_ for more information.
 
 Use The Command Line
 *********************
@@ -53,23 +51,13 @@ Linux command line executables that can be invoked via shell commands.
 
 More documentation on the command line can be found on the `Go SDK's Github Page <https://github.com/blockchyp/blockchyp-go>`_
 
-Build An SDK
-**********************
+Use The Rest API's
+*********************
 
-If you're using a modern programming language that we just
-haven't gotten around to yet (like Ruby, Swift, or Rust), we'd prefer to work with you on creating an
-open source SDK for your platform.  This allows other developers in your technology ecosystem
-to benefit going forward.
-
-To develop your own SDK, check out the `SDK Developers Guide <sdk-guide/index.html>`_
-for some high level concepts and guidance.  Then use the REST API references as
-you work through the various terminal and gateway transactions.
-
-The `Go SDK <https://github.com/blockchyp/blockchyp-go>`_ is open source and serves
-as a fairly good example of what should go into a new SDK.
-
-If you're thinking of developing a new SDK, feel free to contact us at nerds@blockchyp.com.
-We'll talk through the trade offs with you and maybe pitch in ourselves.
+The SDKs aren't required. We just provide them to make things a little bit simpler
+and faster for developers.  The BlockChyp Gateway and all BlockChyp terminals
+run simple REST APIs you can integrate with directly.  Checkout the `Terminal REST API Reference <rest-api/terminal/index.html>`_
+and the `Payment Gateway REST API Reference <rest-api/gateway/index.html>`_ for more information.
 
 Standard Codes
 ------------------------
@@ -115,14 +103,6 @@ This list enumerates the codes for entry methods.
 :SWIPE: Magnetic Stripe Read
 
 :KEYED: Manually keyed
-
-:APPLEPAY: ApplePay
-
-:ANDROID: Android Pay
-
-:SAMSUNG:  Samsung Pay
-
-:WALLET:  Mobile Crypto Wallet
 
 Currency Codes
 *********************
@@ -384,35 +364,6 @@ forward transaction.
 Terminals attempt to forward offline transactions every two minutes until they
 are successfully processed.  To test a declined store and forward transaction, try
 running an amount with all sevens below the floor limit with the decline test card.
-
-
-Roll Your Own SDK
---------------------
-
-If there's not an SDK for your favorite language or platform, check out our
-SDK developers guide for our advice about how to make your own.
-
-.. toctree::
-   :maxdepth: 2
-
-   sdk-guide/index
-
-Running EMV Certification Tests
-------------------------------------
-
-.. note::  **This section is for advanced developers only. EMV Certification is not required to use BlockChyp**.
-
-
-Merchants and developers who use BlockChyp do not require EMV certification and
-the default test API provides abbreviated responses suitable for most purposes.
-But, these simplified responses may not satisfy all the card log requirements for real
-EMV tests.
-
-If you happen to have a Collis or UL EMV Test Tool and want to run real EMV
-certification tests against BlockChyp, contact us at nerds@blockchyp.com.  We'll
-connect your test merchant account to a real EMV certification back end.
-
-
 
 .. toctree::
    :maxdepth: 2

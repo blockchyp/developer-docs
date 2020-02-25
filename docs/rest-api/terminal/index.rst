@@ -586,7 +586,7 @@ Sample Request and Response::
     "transactionType":"charge",
     "entryMethod":"CHIP"
   }
-  }
+}
 
 
 Refund (/api/refund)
@@ -1176,7 +1176,7 @@ PCI restricts free form prompts is that a malicious application could use the
 prompt to ask for card numbers or PIN's.  We know *you* wouldn't do that, but
 someone might.
 
-We currently support 'email', 'phone', 'customer-number', and 'rewards-number' prompts.
+We currently support 'name', 'first-name', 'last-name', 'email', 'phone', 'customer-number', and 'rewards-number' prompts.
 
 Ping us at support@blockchyp.com if you need us to add one to the list.
 
